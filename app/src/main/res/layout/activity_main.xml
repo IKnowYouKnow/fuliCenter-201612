@@ -39,7 +39,7 @@
             android:button="@null"
             android:drawableTop="@drawable/selector_menu_item_category"
             android:gravity="center_horizontal"
-            android:text="新品"
+            android:text="分类"
             style="@style/menu_item_style"
             android:textColor="@color/main_botton_text_color"
             android:checked="false"/>
@@ -51,7 +51,7 @@
             android:checked="false"
             android:drawableTop="@drawable/selector_menu_item_cart"
             android:gravity="center_horizontal"
-            android:text="新品"
+            android:text="购物车"
             android:textColor="@color/main_botton_text_color" />
 
         <RadioButton
