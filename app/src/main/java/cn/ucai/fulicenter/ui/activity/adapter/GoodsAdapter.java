@@ -20,8 +20,30 @@ import cn.ucai.fulicenter.model.utils.ImageLoader;
  */
 
 public class GoodsAdapter extends RecyclerView.Adapter {
+    static final int TYPE_FOOTER = 0;
+    static final int TYPE_ITEM = 1;
+
     Context mContext;
     ArrayList<NewGoodsBean> mNewGoodsList;
+
+    boolean isMore;
+
+
+    public void setTextFooter(String textFooter) {
+        this.textFooter = textFooter;
+        notifyDataSetChanged();
+    }
+
+    public void setMore(boolean more) {
+        isMore = more;
+    }
+
+    public boolean isMore() {
+
+        return isMore;
+    }
+
+    String textFooter;
 
     public GoodsAdapter(Context mContext, ArrayList<NewGoodsBean> mNewGoodsList) {
         this.mContext = mContext;
@@ -30,27 +52,47 @@ public class GoodsAdapter extends RecyclerView.Adapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = View.inflate(mContext, R.layout.item_layout, null);
-
-        return new ViewHolder(view);
+        View view = null;
+        switch (viewType) {
+            case TYPE_FOOTER:
+                view = View.inflate(mContext, R.layout.footer_layout, null);
+                return new FooterHolder(view);
+            case TYPE_ITEM:
+                view = View.inflate(mContext, R.layout.item_layout, null);
+                return new ItemHolder(view);
+        }
+        return null;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder parent, int position) {
-        ViewHolder holder = (ViewHolder) parent;
+        if (getItemCount() - 1 == position) {
+            FooterHolder holder = (FooterHolder) parent;
+            holder.tvFooter.setText(textFooter);
+            return;
+        }
+        ItemHolder holder = (ItemHolder) parent;
         NewGoodsBean bean = mNewGoodsList.get(position);
         holder.mtvNewGoodsName.setText(bean.getGoodsName());
         holder.mtvNewGoodsPrice.setText(bean.getPromotePrice());
-        ImageLoader.downloadImg(mContext,holder.mtvPic,bean.getGoodsThumb());
+        ImageLoader.downloadImg(mContext, holder.mtvPic, bean.getGoodsThumb());
 
     }
 
     @Override
     public int getItemCount() {
-        return mNewGoodsList != null ? mNewGoodsList.size() : 0;
+        return mNewGoodsList != null ? mNewGoodsList.size() + 1 : 0;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public int getItemViewType(int position) {
+        if (getItemCount() - 1 == position) {
+            return TYPE_FOOTER;
+        }
+        return TYPE_ITEM;
+    }
+
+    class ItemHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tvPic)
         ImageView mtvPic;
         @BindView(R.id.tvNewGoodsName)
@@ -58,7 +100,17 @@ public class GoodsAdapter extends RecyclerView.Adapter {
         @BindView(R.id.tvNewGoodsPrice)
         TextView mtvNewGoodsPrice;
 
-        ViewHolder(View view) {
+        ItemHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    class FooterHolder extends RecyclerView.ViewHolder{
+        @BindView(R.id.tvFooter)
+        TextView tvFooter;
+
+        FooterHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }

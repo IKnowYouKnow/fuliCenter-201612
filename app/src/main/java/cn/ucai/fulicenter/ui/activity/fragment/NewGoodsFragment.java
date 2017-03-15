@@ -4,11 +4,13 @@ package cn.ucai.fulicenter.ui.activity.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -22,7 +24,6 @@ import cn.ucai.fulicenter.model.net.INewGoodsModel;
 import cn.ucai.fulicenter.model.net.NewGoodsModel;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
 import cn.ucai.fulicenter.model.utils.ConvertUtils;
-import cn.ucai.fulicenter.model.utils.L;
 import cn.ucai.fulicenter.ui.activity.adapter.GoodsAdapter;
 import cn.ucai.fulicenter.ui.activity.view.SpaceItemDecoration;
 
@@ -31,21 +32,29 @@ import cn.ucai.fulicenter.ui.activity.view.SpaceItemDecoration;
  */
 public class NewGoodsFragment extends Fragment {
 
+    static final int ACTION_DOWNLOAD = 1;
+    static final int ACTION_PULL_DOWN = 2;
+    static final int ACTION_PULL_UP = 3;
 
-    @BindView(R.id.rvNewGoods)
-    RecyclerView mrvNewGoods;
     Unbinder mBind;
     INewGoodsModel mModel;
     GridLayoutManager mLayoutManager;
     ArrayList<NewGoodsBean> mGoodsList;
     int mPageId = 1;
     GoodsAdapter mAdapter;
+    @BindView(R.id.tvRefreshHint)
+    TextView mtvRefreshHint;
+    @BindView(R.id.rvNewGoods)
+    RecyclerView mrvNewGoods;
+    @BindView(R.id.srl)
+    SwipeRefreshLayout msrl;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_goods, container, false);
-        mBind = ButterKnife.bind(this,view);
+        mBind = ButterKnife.bind(this, view);
         return view;
     }
 
@@ -54,8 +63,38 @@ public class NewGoodsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mModel = new NewGoodsModel();
         initView();
-        initData();
+        initData(mPageId, ACTION_DOWNLOAD);
+        setListener();
     }
+
+    private void setListener() {
+        setPullDownListener();
+        setPulUpListener();
+    }
+
+    private void setPulUpListener() {
+        mrvNewGoods.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                mPageId++;
+                initData(mPageId, ACTION_PULL_UP);
+            }
+        });
+    }
+
+    private void setPullDownListener() {
+        msrl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mGoodsList.clear();
+                mPageId = 1;
+                initData(mPageId, ACTION_PULL_DOWN);
+                mtvRefreshHint.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
 
     private void initView() {
         mLayoutManager = new GridLayoutManager(getContext(), I.COLUM_NUM);
@@ -69,16 +108,37 @@ public class NewGoodsFragment extends Fragment {
 
     }
 
-    private void initData() {
-        mModel.loadData(getContext(), mPageId, new OnCompleteListener<NewGoodsBean[]>() {
+    private void initData(int pageId, final int action) {
+        mModel.loadData(getContext(), pageId, new OnCompleteListener<NewGoodsBean[]>() {
             @Override
             public void onSuccess(NewGoodsBean[] result) {
-                if (result != null && result.length > 0) {
-                    ArrayList<NewGoodsBean> list = ConvertUtils.array2List(result);
-                    mGoodsList.clear();
-                    mGoodsList.addAll(list);
-                    mAdapter.notifyDataSetChanged();
+                mAdapter.setMore(result != null && result.length > 0);
+                if (!mAdapter.isMore()) {
+                    if (action == ACTION_PULL_UP) {
+                        mAdapter.setTextFooter("没有更多数据了");
+                    }
+                    return;
+                }
+                ArrayList<NewGoodsBean> list = ConvertUtils.array2List(result);
 
+                switch (action) {
+                    case ACTION_DOWNLOAD:
+                        mGoodsList.clear();
+                        mGoodsList.addAll(list);
+                        mAdapter.notifyDataSetChanged();
+                        mAdapter.setTextFooter("加载更多数据。。。");
+                        break;
+                    case ACTION_PULL_DOWN:
+                        mGoodsList.addAll(list);
+                        mAdapter.notifyDataSetChanged();
+                        mtvRefreshHint.setVisibility(View.GONE);
+                        msrl.setRefreshing(false);
+                        mAdapter.setTextFooter("加载更多数据。。。");
+                        break;
+                    case ACTION_PULL_UP:
+                        mGoodsList.addAll(list);
+                        mAdapter.notifyDataSetChanged();
+                        break;
                 }
             }
 

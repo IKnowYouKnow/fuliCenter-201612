@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.rbPersonal)
     RadioButton mrbPersonal;
     @BindView(R.id.content_layout)
-    FrameLayout mcontentLayout;
+    FrameLayout mContentLayout;
     Unbinder bind;
 
     @Override
