@@ -1,6 +1,7 @@
 package cn.ucai.fulicenter.ui.activity;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -10,6 +11,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.ui.activity.fragment.BoutiqueFragment;
 import cn.ucai.fulicenter.ui.activity.fragment.NewGoodsFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,7 +41,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onCheckedChange(View view) {
-
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        switch (view.getId()) {
+            case R.id.rbNewGoods:
+                ft.replace(R.id.content_layout, new NewGoodsFragment()).commit();
+                break;
+            case R.id.rbBoutique:
+                ft.replace(R.id.content_layout, new BoutiqueFragment()).commit();
+                break;
+        }
     }
 
     @Override
