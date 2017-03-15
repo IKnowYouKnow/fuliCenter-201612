@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.model.bean.NewGoodsBean;
+import cn.ucai.fulicenter.model.utils.ImageLoader;
 
 /**
  * Created by Administrator on 2017/3/15 0015.
@@ -39,6 +41,7 @@ public class GoodsAdapter extends RecyclerView.Adapter {
         NewGoodsBean bean = mNewGoodsList.get(position);
         holder.mtvNewGoodsName.setText(bean.getGoodsName());
         holder.mtvNewGoodsPrice.setText(bean.getPromotePrice());
+        ImageLoader.downloadImg(mContext,holder.mtvPic,bean.getGoodsThumb());
 
     }
 
@@ -49,7 +52,7 @@ public class GoodsAdapter extends RecyclerView.Adapter {
 
     class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tvPic)
-        TextView mtvPic;
+        ImageView mtvPic;
         @BindView(R.id.tvNewGoodsName)
         TextView mtvNewGoodsName;
         @BindView(R.id.tvNewGoodsPrice)
