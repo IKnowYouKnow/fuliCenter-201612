@@ -77,8 +77,12 @@ public class NewGoodsFragment extends Fragment {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                mPageId++;
-                initData(mPageId, ACTION_PULL_UP);
+                int lastPosition = mLayoutManager.findLastVisibleItemPosition();
+                if (mAdapter.isMore() && lastPosition == mAdapter.getItemCount() - 1 && RecyclerView.SCROLL_STATE_IDLE == newState) {
+                    mPageId++;
+                    initData(mPageId, ACTION_PULL_UP);
+                }
+
             }
         });
     }
