@@ -10,6 +10,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.ui.activity.fragment.NewGoodsFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         bind = ButterKnife.bind(this);
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.content_layout, new NewGoodsFragment())
+                .commit();
     }
 
     public void onCheckedChange(View view) {

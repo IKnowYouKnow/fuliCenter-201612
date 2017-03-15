@@ -11,15 +11,15 @@ import cn.ucai.fulicenter.model.utils.OkHttpUtils;
  */
 
 public class NewGoodsModel implements INewGoodsModel {
+
     @Override
     public void loadData(Context context, int pageID, OnCompleteListener listener) {
         OkHttpUtils<NewGoodsBean[]> utils = new OkHttpUtils<>(context);
-        utils.url(I.REQUEST_FIND_NEW_BOUTIQUE_GOODS)
-                .addParam(I.PAGE_ID,pageID+"")
-                .addParam(I.PAGE_SIZE,String.valueOf(I.PAGE_SIZE_DEFAULT))
+        utils.setRequestUrl(I.REQUEST_FIND_NEW_BOUTIQUE_GOODS)
                 .addParam(I.NewAndBoutiqueGoods.CAT_ID,String.valueOf(I.CAT_ID))
+                .addParam(I.PAGE_ID,String.valueOf(pageID))
+                .addParam(I.PAGE_SIZE,String.valueOf(I.PAGE_SIZE_DEFAULT))
                 .targetClass(NewGoodsBean[].class)
                 .execute(listener);
-
     }
 }
