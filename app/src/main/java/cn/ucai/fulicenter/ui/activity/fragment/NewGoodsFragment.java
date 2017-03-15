@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -32,9 +33,6 @@ import cn.ucai.fulicenter.ui.activity.view.SpaceItemDecoration;
  */
 public class NewGoodsFragment extends Fragment {
 
-    static final int ACTION_DOWNLOAD = 1;
-    static final int ACTION_PULL_DOWN = 2;
-    static final int ACTION_PULL_UP = 3;
 
     Unbinder mBind;
     INewGoodsModel mModel;
@@ -63,7 +61,7 @@ public class NewGoodsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mModel = new NewGoodsModel();
         initView();
-        initData(mPageId, ACTION_DOWNLOAD);
+        initData(mPageId, I.ACTION_DOWNLOAD);
         setListener();
     }
 
@@ -80,7 +78,7 @@ public class NewGoodsFragment extends Fragment {
                 int lastPosition = mLayoutManager.findLastVisibleItemPosition();
                 if (mAdapter.isMore() && lastPosition == mAdapter.getItemCount() - 1 && RecyclerView.SCROLL_STATE_IDLE == newState) {
                     mPageId++;
-                    initData(mPageId, ACTION_PULL_UP);
+                    initData(mPageId, I.ACTION_PULL_UP);
                 }
 
             }
@@ -93,7 +91,7 @@ public class NewGoodsFragment extends Fragment {
             public void onRefresh() {
                 mGoodsList.clear();
                 mPageId = 1;
-                initData(mPageId, ACTION_PULL_DOWN);
+                initData(mPageId, I.ACTION_PULL_DOWN);
                 mtvRefreshHint.setVisibility(View.VISIBLE);
             }
         });
@@ -118,7 +116,7 @@ public class NewGoodsFragment extends Fragment {
             public void onSuccess(NewGoodsBean[] result) {
                 mAdapter.setMore(result != null && result.length > 0);
                 if (!mAdapter.isMore()) {
-                    if (action == ACTION_PULL_UP) {
+                    if (action == I.ACTION_PULL_UP) {
                         mAdapter.setTextFooter("没有更多数据了");
                     }
                     return;
@@ -126,20 +124,20 @@ public class NewGoodsFragment extends Fragment {
                 ArrayList<NewGoodsBean> list = ConvertUtils.array2List(result);
 
                 switch (action) {
-                    case ACTION_DOWNLOAD:
+                    case I.ACTION_DOWNLOAD:
                         mGoodsList.clear();
                         mGoodsList.addAll(list);
                         mAdapter.notifyDataSetChanged();
                         mAdapter.setTextFooter("加载更多数据。。。");
                         break;
-                    case ACTION_PULL_DOWN:
+                    case I.ACTION_PULL_DOWN:
                         mGoodsList.addAll(list);
                         mAdapter.notifyDataSetChanged();
                         mtvRefreshHint.setVisibility(View.GONE);
                         msrl.setRefreshing(false);
                         mAdapter.setTextFooter("加载更多数据。。。");
                         break;
-                    case ACTION_PULL_UP:
+                    case I.ACTION_PULL_UP:
                         mGoodsList.addAll(list);
                         mAdapter.notifyDataSetChanged();
                         break;
@@ -148,7 +146,9 @@ public class NewGoodsFragment extends Fragment {
 
             @Override
             public void onError(String error) {
-
+                mAdapter.notifyDataSetChanged();
+                mtvRefreshHint.setVisibility(View.GONE);
+                Toast.makeText(getContext(), "出问题啦", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.bean.NewGoodsBean;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
 
@@ -20,8 +21,6 @@ import cn.ucai.fulicenter.model.utils.ImageLoader;
  */
 
 public class GoodsAdapter extends RecyclerView.Adapter {
-    static final int TYPE_FOOTER = 0;
-    static final int TYPE_ITEM = 1;
 
     Context mContext;
     ArrayList<NewGoodsBean> mNewGoodsList;
@@ -54,10 +53,10 @@ public class GoodsAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = null;
         switch (viewType) {
-            case TYPE_FOOTER:
+            case I.TYPE_FOOTER:
                 view = View.inflate(mContext, R.layout.footer_layout, null);
                 return new FooterHolder(view);
-            case TYPE_ITEM:
+            case I.TYPE_ITEM:
                 view = View.inflate(mContext, R.layout.item_layout, null);
                 return new ItemHolder(view);
         }
@@ -87,9 +86,9 @@ public class GoodsAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         if (getItemCount() - 1 == position) {
-            return TYPE_FOOTER;
+            return I.TYPE_FOOTER;
         }
-        return TYPE_ITEM;
+        return I.TYPE_ITEM;
     }
 
     class ItemHolder extends RecyclerView.ViewHolder {
