@@ -12,6 +12,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.ui.fragment.BoutiqueFragment;
+import cn.ucai.fulicenter.ui.fragment.CategoryFragment;
 import cn.ucai.fulicenter.ui.fragment.NewGoodsFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -48,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.rbBoutique:
                 ft.replace(R.id.content_layout, new BoutiqueFragment()).commit();
+                break;
+            case R.id.rbCategory:
+                ft.replace(R.id.content_layout, new CategoryFragment()).commit();
                 break;
         }
     }

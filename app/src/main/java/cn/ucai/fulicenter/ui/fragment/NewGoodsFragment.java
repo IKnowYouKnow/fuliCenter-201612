@@ -71,6 +71,7 @@ public class NewGoodsFragment extends Fragment {
     private void setListener() {
         setPullDownListener();
         setPulUpListener();
+
     }
 
     private void setPulUpListener() {

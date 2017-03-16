@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:orientation="horizontal"
+    android:background="@drawable/divid_explist_group"
+    >
+
+    <ImageView
+        android:id="@+id/ivGroupPic"
+        android:layout_weight="1"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/nopic"
+        android:layout_gravity="center_vertical"
+        />
+    <TextView
+        android:id="@+id/tvGroupTitle"
+        android:layout_weight="8"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="美妆"
+        android:textSize="20sp"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="30dp"
+        />
+    <ImageView
+        android:id="@+id/ivExpand"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/expand_off"
+        android:layout_gravity="center_vertical"
+        />
+</LinearLayout>
