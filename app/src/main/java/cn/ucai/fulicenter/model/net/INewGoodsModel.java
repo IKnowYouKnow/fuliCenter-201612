@@ -9,5 +9,5 @@ import cn.ucai.fulicenter.model.bean.NewGoodsBean;
  */
 
 public interface INewGoodsModel {
-    void loadData(Context context,int pageID,OnCompleteListener<NewGoodsBean[]> listener);
+    void loadData(Context context, int catId, int pageID, OnCompleteListener<NewGoodsBean[]> listener);
 }

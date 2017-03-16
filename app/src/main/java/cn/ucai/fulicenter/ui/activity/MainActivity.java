@@ -11,8 +11,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.ucai.fulicenter.R;
-import cn.ucai.fulicenter.ui.activity.fragment.BoutiqueFragment;
-import cn.ucai.fulicenter.ui.activity.fragment.NewGoodsFragment;
+import cn.ucai.fulicenter.ui.fragment.BoutiqueFragment;
+import cn.ucai.fulicenter.ui.fragment.NewGoodsFragment;
 
 public class MainActivity extends AppCompatActivity {
 

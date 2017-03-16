@@ -1,4 +1,4 @@
-package cn.ucai.fulicenter.ui.activity.adapter;
+package cn.ucai.fulicenter.ui.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

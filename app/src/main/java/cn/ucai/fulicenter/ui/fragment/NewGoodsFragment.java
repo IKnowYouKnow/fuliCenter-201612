@@ -1,4 +1,4 @@
-package cn.ucai.fulicenter.ui.activity.fragment;
+package cn.ucai.fulicenter.ui.fragment;
 
 
 import android.os.Bundle;
@@ -25,8 +25,8 @@ import cn.ucai.fulicenter.model.net.INewGoodsModel;
 import cn.ucai.fulicenter.model.net.NewGoodsModel;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
 import cn.ucai.fulicenter.model.utils.ConvertUtils;
-import cn.ucai.fulicenter.ui.activity.adapter.GoodsAdapter;
-import cn.ucai.fulicenter.ui.activity.view.SpaceItemDecoration;
+import cn.ucai.fulicenter.ui.adapter.GoodsAdapter;
+import cn.ucai.fulicenter.ui.view.SpaceItemDecoration;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,6 +47,8 @@ public class NewGoodsFragment extends Fragment {
     @BindView(R.id.srl)
     SwipeRefreshLayout msrl;
 
+    int catID = 0;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,6 +63,7 @@ public class NewGoodsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mModel = new NewGoodsModel();
         initView();
+        catID = getActivity().getIntent().getIntExtra(I.NewAndBoutiqueGoods.CAT_ID, 0);
         initData(mPageId, I.ACTION_DOWNLOAD);
         setListener();
     }
@@ -111,8 +114,8 @@ public class NewGoodsFragment extends Fragment {
 
     }
 
-    private void initData(int pageId, final int action) {
-        mModel.loadData(getContext(), pageId, new OnCompleteListener<NewGoodsBean[]>() {
+    public void initData(int pageId, final int action) {
+        mModel.loadData(getContext(),catID, pageId, new OnCompleteListener<NewGoodsBean[]>() {
             @Override
             public void onSuccess(NewGoodsBean[] result) {
                 mAdapter.setMore(result != null && result.length > 0);

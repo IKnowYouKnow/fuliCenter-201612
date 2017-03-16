@@ -1,4 +1,4 @@
-package cn.ucai.fulicenter.ui.activity.fragment;
+package cn.ucai.fulicenter.ui.fragment;
 
 
 import android.os.Bundle;
@@ -25,7 +25,7 @@ import cn.ucai.fulicenter.model.net.BoutiqueModel;
 import cn.ucai.fulicenter.model.net.IBoutiqueModel;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
 import cn.ucai.fulicenter.model.utils.ConvertUtils;
-import cn.ucai.fulicenter.ui.activity.adapter.BoutiqueAdapter;
+import cn.ucai.fulicenter.ui.adapter.BoutiqueAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
