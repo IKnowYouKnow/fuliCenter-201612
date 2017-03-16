@@ -40,7 +40,7 @@
     <cn.ucai.fulicenter.ui.view.SlideAutoLoopView
         android:id="@+id/salv"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="280dp"
         android:background="@color/good_detail_bg_white" />
 
     <cn.ucai.fulicenter.ui.view.FlowIndicator
@@ -53,5 +53,11 @@
         app:normal_color="#a1d1d1d1"
         app:r="5dp"
         app:space="3dp" />
+    <WebView
+        android:id="@+id/wvDetails"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
 
 </LinearLayout>
