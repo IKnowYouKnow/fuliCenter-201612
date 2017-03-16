@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.ui.view.MFGT;
 
 public class SplashActivity extends AppCompatActivity {
     int mTime = 2000;
@@ -22,8 +23,8 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                SplashActivity.this.finish();
+                MFGT.gotoMain(SplashActivity.this);
+                MFGT.finish(SplashActivity.this);
             }
         }, mTime);
     }

@@ -10,6 +10,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.ui.fragment.NewGoodsFragment;
+import cn.ucai.fulicenter.ui.view.MFGT;
 
 /**
  * Created by Administrator on 2017/3/16 0016.
@@ -35,7 +36,7 @@ public class BoutiqueChildActivity extends AppCompatActivity {
     }
 
     public void onBack(View view) {
-        BoutiqueChildActivity.this.finish();
+        MFGT.finish(BoutiqueChildActivity.this);
     }
 
     @Override
