@@ -30,7 +30,6 @@ public class BoutiqueAdapter extends RecyclerView.Adapter {
     boolean isMore;
 
 
-
     public void setMore(boolean more) {
         isMore = more;
     }
@@ -49,7 +48,7 @@ public class BoutiqueAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = View.inflate(mContext, R.layout.boutique_layout, null);
-                return new ItemHolder(view);
+        return new ItemHolder(view);
     }
 
     @Override
@@ -63,8 +62,9 @@ public class BoutiqueAdapter extends RecyclerView.Adapter {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                mContext.startActivity(new Intent(mContext,BoutiqueChildActivity.class).putExtra(I.NewAndBoutiqueGoods.CAT_ID,bean.getId()));
+                mContext.startActivity(new Intent(mContext, BoutiqueChildActivity.class)
+                        .putExtra(I.NewAndBoutiqueGoods.CAT_ID, bean.getId())
+                .putExtra("title",bean.getTitle()));
             }
         });
     }
@@ -78,7 +78,6 @@ public class BoutiqueAdapter extends RecyclerView.Adapter {
     public int getItemViewType(int position) {
         return I.TYPE_ITEM;
     }
-
 
 
     static class ItemHolder extends RecyclerView.ViewHolder {
