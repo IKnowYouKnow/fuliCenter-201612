@@ -30,7 +30,7 @@
             android:button="@null"
             android:drawableTop="@drawable/selector_menu_item_boutique"
             android:gravity="center_horizontal"
-            android:text="新品"
+            android:text="精选"
             style="@style/menu_item_style"
             android:textColor="@color/main_botton_text_color"
             android:checked="false"/>

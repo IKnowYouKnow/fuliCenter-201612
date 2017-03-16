@@ -2,6 +2,7 @@ package cn.ucai.fulicenter.ui.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,6 +16,7 @@ import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.bean.NewGoodsBean;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
+import cn.ucai.fulicenter.ui.view.MFGT;
 
 /**
  * Created by Administrator on 2017/3/15 0015.
@@ -71,10 +73,18 @@ public class GoodsAdapter extends RecyclerView.Adapter {
             return;
         }
         ItemHolder holder = (ItemHolder) parent;
-        NewGoodsBean bean = mNewGoodsList.get(position);
+        final NewGoodsBean bean = mNewGoodsList.get(position);
         holder.mtvNewGoodsName.setText(bean.getGoodsName());
         holder.mtvNewGoodsPrice.setText(bean.getPromotePrice());
         ImageLoader.downloadImg(mContext, holder.mtvPic, bean.getGoodsThumb());
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("main", "..................");
+                MFGT.gotoGoodsDetailActivity(mContext, bean);
+            }
+        });
 
     }
 

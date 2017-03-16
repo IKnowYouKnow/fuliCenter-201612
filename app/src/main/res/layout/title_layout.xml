@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="拯救头发，美丽新妆"
+            android:text="商品详情"
             android:textColor="@color/white"
             android:textSize="18sp"
             />

@@ -7,7 +7,9 @@ import android.content.Intent;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.bean.BoutiqueBean;
+import cn.ucai.fulicenter.model.bean.NewGoodsBean;
 import cn.ucai.fulicenter.ui.activity.BoutiqueChildActivity;
+import cn.ucai.fulicenter.ui.activity.GoodsDetailsActivity;
 import cn.ucai.fulicenter.ui.activity.MainActivity;
 
 /**
@@ -38,5 +40,10 @@ public class MFGT {
         startActivity((Activity)activity,new Intent(activity,BoutiqueChildActivity.class)
         .putExtra(I.NewAndBoutiqueGoods.CAT_ID,bean.getId())
         .putExtra(I.Boutique.TITLE,bean.getTitle()));
+    }
+
+    public static void gotoGoodsDetailActivity(Context activity, NewGoodsBean bean) {
+        startActivity((Activity) activity, new Intent(activity, GoodsDetailsActivity.class)
+                .putExtra(I.Goods.KEY_GOODS_ID, bean.getGoodsId()));
     }
 }
