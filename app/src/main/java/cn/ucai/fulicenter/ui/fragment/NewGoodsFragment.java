@@ -48,6 +48,7 @@ public class NewGoodsFragment extends Fragment {
     SwipeRefreshLayout msrl;
 
     int catID = 0;
+    private int mSortBy;
 
 
     @Override
@@ -164,5 +165,9 @@ public class NewGoodsFragment extends Fragment {
         if (mBind != null) {
             mBind.unbind();
         }
+    }
+
+    public void setSortBy(int sortBy) {
+        mAdapter.setSortBy(sortBy);
     }
 }

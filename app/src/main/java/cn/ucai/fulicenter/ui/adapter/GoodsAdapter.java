@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,8 +28,42 @@ public class GoodsAdapter extends RecyclerView.Adapter {
 
     Context mContext;
     ArrayList<NewGoodsBean> mNewGoodsList;
+    int sortBy = I.SORT_BY_ADDTIME_DESC;
 
     boolean isMore;
+
+    public void setSortBy(int sortBy) {
+        this.sortBy = sortBy;
+        sortBy();
+        notifyDataSetChanged();
+    }
+
+    private void sortBy() {
+            Collections.sort(mNewGoodsList, new Comparator<NewGoodsBean>() {
+                @Override
+                public int compare(NewGoodsBean l, NewGoodsBean r) {
+                    switch (sortBy) {
+                        case I.SORT_BY_ADDTIME_DESC:
+                            sortBy = (int) (l.getAddTime() - r.getAddTime());
+                            break;
+                        case I.SORT_BY_ADDTIME_ASC:
+                            sortBy = (int) (r.getAddTime() - l.getAddTime());
+                            break;
+                        case I.SORT_BY_PRICE_DESC:
+                            sortBy = price(l.getCurrencyPrice()) - price(r.getCurrencyPrice());
+                            break;
+                        case I.SORT_BY_PRICE_ASC:
+                            sortBy = price(r.getCurrencyPrice()) - price(l.getCurrencyPrice());
+                            break;
+                    }
+                    return sortBy;
+                }
+            });
+    }
+
+    private int price(String pri) {
+        return Integer.parseInt(pri.substring(pri.indexOf("￥")+1));
+    }
 
 
     public void setTextFooter(String textFooter) {
@@ -75,13 +111,12 @@ public class GoodsAdapter extends RecyclerView.Adapter {
         ItemHolder holder = (ItemHolder) parent;
         final NewGoodsBean bean = mNewGoodsList.get(position);
         holder.mtvNewGoodsName.setText(bean.getGoodsName());
-        holder.mtvNewGoodsPrice.setText(bean.getPromotePrice());
+        holder.mtvNewGoodsPrice.setText(bean.getCurrencyPrice());
         ImageLoader.downloadImg(mContext, holder.mtvPic, bean.getGoodsThumb());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("main", "..................");
                 MFGT.gotoGoodsDetailActivity(mContext, bean);
             }
         });
