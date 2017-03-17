@@ -70,6 +70,7 @@ public class CategoryFragment extends Fragment {
 
         mAdapter = new CategoryAdapter(getActivity(), mGroupList, mChildList);
         mElv.setAdapter(mAdapter);
+        mElv.setGroupIndicator(null);
 
     }
     private void initData() {
@@ -79,7 +80,11 @@ public class CategoryFragment extends Fragment {
                 final ArrayList<CategoryGroupBean> list = ConvertUtils.array2List(result);
                 mGroupList.addAll(list);
                 mAdapter.notifyDataSetChanged();
-                initChild(list);
+                for (int i =0;i<list.size();i++) {
+                    mChildList.add(new ArrayList<CategoryChildBean>());
+                    initChild(list,i);
+                }
+
             }
             @Override
             public void onError(String error) {
@@ -88,24 +93,16 @@ public class CategoryFragment extends Fragment {
         });
 
 
-
-
-
     }
 
-    int i;
-    private void initChild(final ArrayList<CategoryGroupBean> list) {
-        if (i >= list.size()) {
-            return;
-        }
-        final int parentId = list.get(i++).getId();
+    private void initChild(final ArrayList<CategoryGroupBean> list,final int index) {
+        final int parentId = list.get(index).getId();
         mModel.loadChildData(getActivity(), parentId, new OnCompleteListener<CategoryChildBean[]>() {
                 @Override
                 public void onSuccess(CategoryChildBean[] result) {
                     ArrayList<CategoryChildBean> bean = ConvertUtils.array2List(result);
-                    mChildList.add(bean);
+                    mChildList.set(index,bean);
                     mAdapter.notifyDataSetChanged();
-                    initChild(list);
                 }
                 @Override
                 public void onError(String error) {

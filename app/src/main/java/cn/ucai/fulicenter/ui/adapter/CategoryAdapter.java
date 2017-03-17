@@ -41,7 +41,6 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
     }
 
 
-
     @Override
     public int getGroupCount() {
         return mGroupList != null ? mGroupList.size() : 0;
@@ -49,7 +48,8 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return mChildList.get(groupPosition) != null? mChildList.get(groupPosition).size() : 0;
+        return mChildList.get(groupPosition) != null
+                && mChildList != null ? mChildList.get(groupPosition).size() : 0;
 
     }
 
@@ -90,7 +90,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
             holder = (GroupHolder) convertView.getTag();
         }
         holder.mTvGroupTitle.setText(mGroupList.get(groupPosition).getName());
-        ImageLoader.downloadImg(mContext,holder.mIvGroupPic, mGroupList.get(groupPosition).getImageUrl());
+        ImageLoader.downloadImg(mContext, holder.mIvGroupPic, mGroupList.get(groupPosition).getImageUrl());
         if (isExpanded) {
             holder.mIvExpand.setImageResource(R.mipmap.expand_off);
         } else {
@@ -132,7 +132,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         @BindView(R.id.ivExpand)
         ImageView mIvExpand;
 
-         GroupHolder(View view) {
+        GroupHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
