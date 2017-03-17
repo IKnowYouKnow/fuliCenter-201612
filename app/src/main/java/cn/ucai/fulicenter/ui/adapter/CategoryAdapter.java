@@ -1,11 +1,11 @@
 package cn.ucai.fulicenter.ui.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -17,10 +17,8 @@ import cn.ucai.fulicenter.model.bean.CategoryChildBean;
 import cn.ucai.fulicenter.model.bean.CategoryGroupBean;
 import cn.ucai.fulicenter.model.net.CategoryModel;
 import cn.ucai.fulicenter.model.net.ICategoryModel;
-import cn.ucai.fulicenter.model.net.OnCompleteListener;
-import cn.ucai.fulicenter.model.utils.CommonUtils;
-import cn.ucai.fulicenter.model.utils.ConvertUtils;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
+import cn.ucai.fulicenter.ui.view.MFGT;
 
 /**
  * Created by Administrator on 2017/3/16 0016.
@@ -31,6 +29,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
     Context mContext;
     ArrayList<CategoryGroupBean> mGroupList;
     ArrayList<ArrayList<CategoryChildBean>> mChildList;
+
 
     public CategoryAdapter(Context context, ArrayList<CategoryGroupBean> groupList,
                            ArrayList<ArrayList<CategoryChildBean>> childList) {
@@ -107,14 +106,10 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
             convertView = View.inflate(mContext, R.layout.category_child_item, null);
             holder = new ChildHolder(convertView);
             convertView.setTag(holder);
-
         } else {
             holder = (ChildHolder) convertView.getTag();
         }
-        holder.mTvChildTitle.setText(mChildList.get(groupPosition).get(childPosition).getName());
-        ImageLoader.downloadImg(mContext, holder.mIvChildPic, mChildList.get(groupPosition)
-                .get(childPosition).getImageUrl());
-
+        holder.bind(groupPosition,childPosition);
         return convertView;
     }
 
@@ -142,9 +137,25 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         ImageView mIvChildPic;
         @BindView(R.id.tvChildTitle)
         TextView mTvChildTitle;
+        @BindView(R.id.layoutChild)
+        LinearLayout mLayoutChild;
 
         ChildHolder(View view) {
             ButterKnife.bind(this, view);
+        }
+
+        public void bind(int groupPosition, int childPosition) {
+           mTvChildTitle.setText(mChildList.get(groupPosition).get(childPosition).getName());
+            ImageLoader.downloadImg(mContext, mIvChildPic, mChildList.get(groupPosition)
+                    .get(childPosition).getImageUrl());
+          final int catId = mChildList.get(groupPosition).get(childPosition).getId();
+            mLayoutChild.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MFGT.gotoCategoryChildActivity(mContext, catId);
+                }
+            });
+
         }
     }
 }

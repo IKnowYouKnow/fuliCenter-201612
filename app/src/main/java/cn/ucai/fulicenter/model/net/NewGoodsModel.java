@@ -14,8 +14,12 @@ public class NewGoodsModel implements INewGoodsModel {
 
     @Override
     public void loadData(Context context,int catId, int pageID, OnCompleteListener listener) {
+        String request = I.REQUEST_FIND_NEW_BOUTIQUE_GOODS;
+        if (catId > 0) {
+            request = I.REQUEST_FIND_GOODS_DETAILS;
+        }
         OkHttpUtils<NewGoodsBean[]> utils = new OkHttpUtils<>(context);
-        utils.setRequestUrl(I.REQUEST_FIND_NEW_BOUTIQUE_GOODS)
+        utils.setRequestUrl(request)
                 .addParam(I.NewAndBoutiqueGoods.CAT_ID,String.valueOf(catId))
                 .addParam(I.PAGE_ID,String.valueOf(pageID))
                 .addParam(I.PAGE_SIZE,String.valueOf(I.PAGE_SIZE_DEFAULT))

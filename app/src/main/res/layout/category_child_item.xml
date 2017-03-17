@@ -3,7 +3,8 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:background="@drawable/divide_explist_child"
-              android:orientation="horizontal">
+              android:orientation="horizontal"
+    android:id="@+id/layoutChild">
     <ImageView
         android:id="@+id/ivChildPic"
         android:layout_width="50dp"
