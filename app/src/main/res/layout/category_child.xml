@@ -4,7 +4,26 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <include layout="@layout/title_layout"/>
+    <RelativeLayout
+        android:background="@color/good_detail_title_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/back"
+            />
+        <cn.ucai.fulicenter.ui.view.CatFilterCategoryButton
+            android:id="@+id/btnFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#0000"
+            android:text="大类名称"
+            android:textSize="20sp"
+            android:layout_centerHorizontal="true"
+            android:drawableRight="@drawable/arrow2_up"/>
+    </RelativeLayout>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
