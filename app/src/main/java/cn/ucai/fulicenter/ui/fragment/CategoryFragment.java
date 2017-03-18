@@ -141,6 +141,7 @@ public class CategoryFragment extends Fragment {
         if (dialog) {
             loadFail.setVisibility(View.GONE);
         } else {
+            mLayoutTips.setVisibility(success ? View.GONE : View.VISIBLE);
             loadFail.setVisibility(success ? View.GONE : View.VISIBLE);
         }
     }
