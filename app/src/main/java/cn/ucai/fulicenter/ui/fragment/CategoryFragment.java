@@ -2,19 +2,19 @@ package cn.ucai.fulicenter.ui.fragment;
 
 
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.model.bean.CategoryChildBean;
@@ -41,6 +41,11 @@ public class CategoryFragment extends Fragment {
 
     ArrayList<CategoryGroupBean> mGroupList;
     ArrayList<ArrayList<CategoryChildBean>> mChildList;
+    @BindView(R.id.layout_tips)
+    LinearLayout mLayoutTips;
+
+    View loadView;
+    View loadFail;
 
 
     public CategoryFragment() {
@@ -53,6 +58,11 @@ public class CategoryFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_category, container, false);
         bind = ButterKnife.bind(this, view);
+        loadView = LayoutInflater.from(getContext()).inflate(R.layout.loading, mLayoutTips,false);
+        loadFail = LayoutInflater.from(getContext()).inflate(R.layout.load_fail, mLayoutTips, false);
+        mLayoutTips.addView(loadView);
+        mLayoutTips.addView(loadFail);
+        showDialog(true,false);
         return view;
     }
 
@@ -73,6 +83,7 @@ public class CategoryFragment extends Fragment {
         mElv.setGroupIndicator(null);
 
     }
+
     private void initData() {
         mModel.loadGroupData(getActivity(), new OnCompleteListener<CategoryGroupBean[]>() {
             @Override
@@ -80,37 +91,59 @@ public class CategoryFragment extends Fragment {
                 final ArrayList<CategoryGroupBean> list = ConvertUtils.array2List(result);
                 mGroupList.addAll(list);
                 mAdapter.notifyDataSetChanged();
-                for (int i =0;i<list.size();i++) {
+                for (int i = 0; i < list.size(); i++) {
                     mChildList.add(new ArrayList<CategoryChildBean>());
-                    initChild(list,i);
+                    initChild(list, i);
                 }
-
             }
             @Override
             public void onError(String error) {
                 CommonUtils.showLongToast(error);
+                loadView.setVisibility(View.GONE);
+                loadFail.setVisibility(View.VISIBLE);
+                showDialog(false,false);
             }
         });
-
-
     }
 
-    private void initChild(final ArrayList<CategoryGroupBean> list,final int index) {
+    private void initChild(final ArrayList<CategoryGroupBean> list, final int index) {
         final int parentId = list.get(index).getId();
         mModel.loadChildData(getActivity(), parentId, new OnCompleteListener<CategoryChildBean[]>() {
-                @Override
-                public void onSuccess(CategoryChildBean[] result) {
+            @Override
+            public void onSuccess(CategoryChildBean[] result) {
+                if (result != null) {
                     ArrayList<CategoryChildBean> bean = ConvertUtils.array2List(result);
-                    mChildList.set(index,bean);
+                    mChildList.set(index, bean);
+                    loadView.setVisibility(View.GONE);
+                    showDialog(false,true);
                     mAdapter.notifyDataSetChanged();
                 }
-                @Override
-                public void onError(String error) {
-                    CommonUtils.showLongToast(error);
-                }
-            });
-        }
+            }
 
+            @Override
+            public void onError(String error) {
+                CommonUtils.showLongToast(error);
+                loadView.setVisibility(View.GONE);
+                loadFail.setVisibility(View.VISIBLE);
+                showDialog(false,false);
+            }
+        });
+    }
+    @OnClick(R.id.layout_tips)
+    public void onClick(){
+        if (loadFail.getVisibility() == View.VISIBLE) {
+            initData();
+            showDialog(true,false);
+        }
+    }
+    private void showDialog(boolean dialog, boolean success) {
+        loadView.setVisibility(dialog?View.VISIBLE:View.GONE);
+        if (dialog) {
+            loadFail.setVisibility(View.GONE);
+        } else {
+            loadFail.setVisibility(success ? View.GONE : View.VISIBLE);
+        }
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();
