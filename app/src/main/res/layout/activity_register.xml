@@ -30,15 +30,17 @@
         android:hint="密码"
         android:padding="10dp"
         android:textSize="20sp"
+        android:inputType="textPassword"
         android:drawableRight="@drawable/icon_pwd"/>
     <EditText
         android:id="@+id/etPassword2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:hint="用户名"
+        android:hint="确认密码"
         android:padding="10dp"
         android:textSize="20sp"
+        android:inputType="textPassword"
         android:drawableRight="@drawable/icon_pwd"/>
     <Button
         android:id="@+id/btnRegister"

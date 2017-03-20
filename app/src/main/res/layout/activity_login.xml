@@ -27,6 +27,7 @@
         android:layout_marginTop="3dp"
         android:drawableRight="@drawable/icon_pwd"
         android:hint="密码"
+        android:inputType="textPassword"
         android:padding="10dp"
         android:textSize="20sp"/>
     <Button
