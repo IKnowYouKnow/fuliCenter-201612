@@ -49,6 +49,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void login() {
+        if (checkInput()) {
 
+        }
+    }
+
+    private boolean checkInput() {
+
+        return false;
     }
 }

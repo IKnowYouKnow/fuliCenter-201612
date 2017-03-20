@@ -21,15 +21,6 @@
             android:layout_marginLeft="10dp"
             android:text="用户头像"/>
 
-        <ImageView
-            android:id="@+id/ivAvatar"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/contactlogo"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/openAvatar"
-            android:layout_marginRight="10dp"
-            />
 
         <ImageView
             android:id="@+id/openAvatar"
@@ -38,6 +29,15 @@
             android:src="@drawable/right_arrow_icon"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            />
+        <ImageView
+            android:id="@+id/ivAvatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/contactlogo"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/openAvatar"
             android:layout_marginRight="10dp"
             />
     </RelativeLayout>
@@ -57,15 +57,6 @@
             android:layout_marginLeft="10dp"
             android:text="用户名"/>
 
-        <TextView
-            android:id="@+id/tvUserName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="abcdf"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/openUserName"
-            android:layout_marginRight="10dp"
-            />
 
         <ImageView
             android:id="@+id/openUserName"
@@ -74,6 +65,15 @@
             android:src="@drawable/right_arrow_icon"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            />
+        <TextView
+            android:id="@+id/tvUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="abcdf"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/openUserName"
             android:layout_marginRight="10dp"
             />
     </RelativeLayout>
@@ -92,15 +92,6 @@
             android:layout_marginLeft="10dp"
             android:text="昵称"/>
 
-        <TextView
-            android:id="@+id/tvNick"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="你猜"
-            android:layout_toLeftOf="@id/openNick"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            />
 
         <ImageView
             android:id="@+id/openNick"
@@ -108,6 +99,15 @@
             android:layout_height="wrap_content"
             android:src="@drawable/right_arrow_icon"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            />
+        <TextView
+            android:id="@+id/tvNick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="你猜"
+            android:layout_toLeftOf="@id/openNick"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             />
