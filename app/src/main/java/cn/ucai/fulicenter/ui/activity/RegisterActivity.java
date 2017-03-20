@@ -1,6 +1,7 @@
 package cn.ucai.fulicenter.ui.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -92,8 +93,8 @@ public class RegisterActivity extends AppCompatActivity {
                         } else {
                             CommonUtils.showShortToast(getString(R.string.register_fail));
                         }
-                        mDialog.dismiss();
                     }
+                    mDialog.dismiss();
                 }
 
                 @Override
@@ -108,8 +109,8 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerSuccess() {
+        setResult(RESULT_OK,new Intent().putExtra(I.User.USER_NAME,mUserName));
         CommonUtils.showShortToast(R.string.register_success);
-        mDialog.dismiss();
         MFGT.finish(RegisterActivity.this);
     }
 

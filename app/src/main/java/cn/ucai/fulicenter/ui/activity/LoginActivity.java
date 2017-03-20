@@ -1,5 +1,6 @@
 package cn.ucai.fulicenter.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -11,6 +12,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.ui.view.MFGT;
 
 public class LoginActivity extends AppCompatActivity {
@@ -57,5 +59,14 @@ public class LoginActivity extends AppCompatActivity {
     private boolean checkInput() {
 
         return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == I.REQUEST_CODE_REGISTER) {
+            String name = data.getStringExtra(I.User.USER_NAME);
+            mEtUserName.setText(name);
+        }
     }
 }
