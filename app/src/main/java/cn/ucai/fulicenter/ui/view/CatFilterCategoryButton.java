@@ -4,18 +4,18 @@ import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.sql.DataTruncation;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -25,7 +25,7 @@ import cn.ucai.fulicenter.model.bean.CategoryChildBean;
 import cn.ucai.fulicenter.model.utils.CommonUtils;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
 import cn.ucai.fulicenter.model.utils.L;
-import cn.ucai.fulicenter.ui.adapter.CategoryAdapter;
+import cn.ucai.fulicenter.ui.activity.CategoryChildActivity;
 
 /**
  * Created by Administrator on 2017/3/18 0018.
@@ -85,7 +85,8 @@ public class CatFilterCategoryButton extends Button {
         this.setText(groupName);
         mChildList = list;
         gv = new GridView(mContext);
-        mAdapter = new CatFilterAdapter(mContext, mChildList);
+        gv.setNumColumns(GridView.AUTO_FIT);
+        mAdapter = new CatFilterAdapter(mContext, mChildList, groupName);
 
         gv.setAdapter(mAdapter);
     }
@@ -93,10 +94,12 @@ public class CatFilterCategoryButton extends Button {
     class CatFilterAdapter extends BaseAdapter {
         Context mContext;
         ArrayList<CategoryChildBean> mChildBeen;
+        String groupName;
 
-        public CatFilterAdapter(Context context, ArrayList<CategoryChildBean> childBeen) {
+        public CatFilterAdapter(Context context, ArrayList<CategoryChildBean> childBeen, String groupName) {
             mContext = context;
             mChildBeen = childBeen;
+            this.groupName = groupName;
         }
 
         @Override
@@ -124,7 +127,7 @@ public class CatFilterCategoryButton extends Button {
             } else {
                 vh = (CatFilterViewHolder) convertView.getTag();
             }
-            L.e("main","vh="+vh);
+            L.e("main", "vh=" + vh);
             vh.bind(position);
             return convertView;
         }
@@ -134,16 +137,33 @@ public class CatFilterCategoryButton extends Button {
             ImageView mIvCatFilterPic;
             @BindView(R.id.tvCategoryName)
             TextView mTvCategoryName;
+            @BindView(R.id.layout_category_child)
+            RelativeLayout mLayoutCategoryChild;
 
             CatFilterViewHolder(View view) {
                 ButterKnife.bind(this, view);
             }
 
             public void bind(int position) {
-                mTvCategoryName.setText(mChildBeen.get(position).getName());
+                final CategoryChildBean bean = mChildBeen.get(position);
+                mTvCategoryName.setText(bean.getName());
                 ImageLoader.downloadImg(mContext, mIvCatFilterPic,
-                        mChildBeen.get(position).getImageUrl());
+                        bean.getImageUrl());
+
+                mLayoutCategoryChild.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MFGT.gotoCategoryChildActivity(mContext, bean.getId(), groupName, mChildBeen);
+                        ((CategoryChildActivity) mContext).finish();
+                    }
+                });
             }
+        }
+    }
+
+    public void release() {
+        if (mPopupWindow != null) {
+            mPopupWindow.dismiss();
         }
     }
 }

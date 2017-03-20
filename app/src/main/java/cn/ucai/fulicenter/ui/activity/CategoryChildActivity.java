@@ -86,4 +86,10 @@ public class CategoryChildActivity extends AppCompatActivity {
     public void onClick() {
         MFGT.finish(CategoryChildActivity.this);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mBtnFilter.release();
+    }
 }
