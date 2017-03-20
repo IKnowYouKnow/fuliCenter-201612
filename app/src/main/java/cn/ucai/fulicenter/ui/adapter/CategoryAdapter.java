@@ -152,7 +152,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
             mLayoutChild.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MFGT.gotoCategoryChildActivity(mContext, catId,getGroup(groupPosition).getName());
+                    MFGT.gotoCategoryChildActivity(mContext, catId,getGroup(groupPosition).getName(),mChildList.get(groupPosition));
                 }
             });
 

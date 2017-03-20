@@ -8,11 +8,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.I;
+import cn.ucai.fulicenter.model.bean.CategoryChildBean;
 import cn.ucai.fulicenter.ui.fragment.NewGoodsFragment;
 import cn.ucai.fulicenter.ui.view.CatFilterCategoryButton;
 import cn.ucai.fulicenter.ui.view.MFGT;
@@ -38,6 +41,7 @@ public class CategoryChildActivity extends AppCompatActivity {
     int sort;
 
     String groupName;
+    ArrayList<CategoryChildBean> mList;
 
 
     @Override
@@ -49,11 +53,12 @@ public class CategoryChildActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_layout, mFragment).commit();
         groupName = getIntent().getStringExtra(I.CategoryGroup.NAME);
+        mList = (ArrayList<CategoryChildBean>) getIntent().getSerializableExtra(I.CategoryChild.DATA);
         initView();
     }
 
     private void initView() {
-        mBtnFilter.setText(groupName);
+        mBtnFilter.initView(groupName,mList);
     }
 
     Drawable end;
