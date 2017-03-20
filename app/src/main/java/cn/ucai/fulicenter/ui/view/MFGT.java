@@ -14,7 +14,9 @@ import cn.ucai.fulicenter.model.bean.NewGoodsBean;
 import cn.ucai.fulicenter.ui.activity.BoutiqueChildActivity;
 import cn.ucai.fulicenter.ui.activity.CategoryChildActivity;
 import cn.ucai.fulicenter.ui.activity.GoodsDetailsActivity;
+import cn.ucai.fulicenter.ui.activity.LoginActivity;
 import cn.ucai.fulicenter.ui.activity.MainActivity;
+import cn.ucai.fulicenter.ui.activity.RegisterActivity;
 
 /**
  * Created by Administrator on 2017/3/16 0016.
@@ -56,5 +58,13 @@ public class MFGT {
                 .putExtra(I.NewAndBoutiqueGoods.CAT_ID,catId)
         .putExtra(I.CategoryGroup.NAME,groupName)
         .putExtra(I.CategoryChild.DATA,childList));
+    }
+
+    public static void gotoLoginActivity(Activity activity) {
+        startActivity(activity,LoginActivity.class);
+    }
+
+    public static void gotoRegisterActivity(Activity activity) {
+        startActivity(activity,RegisterActivity.class);
     }
 }

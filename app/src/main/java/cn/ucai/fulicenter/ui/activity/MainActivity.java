@@ -11,9 +11,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.application.FuLiCenterApplication;
 import cn.ucai.fulicenter.ui.fragment.BoutiqueFragment;
 import cn.ucai.fulicenter.ui.fragment.CategoryFragment;
 import cn.ucai.fulicenter.ui.fragment.NewGoodsFragment;
+import cn.ucai.fulicenter.ui.view.MFGT;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.content_layout)
     FrameLayout mContentLayout;
     Unbinder bind;
+    RadioButton[] mRadioButtons;
+    int index;
+    int currentIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,20 +44,63 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.content_layout, new NewGoodsFragment())
                 .commit();
+        initRadioButton();
+    }
+
+    private void initRadioButton() {
+        mRadioButtons = new RadioButton[5];
+        mRadioButtons[0] = mrbNewGoods;
+        mRadioButtons[1] = mrbBoutique;
+        mRadioButtons[2] = mrbCategory;
+        mRadioButtons[3] = mrbCart;
+        mRadioButtons[4] = mrbPersonal;
     }
 
     public void onCheckedChange(View view) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         switch (view.getId()) {
             case R.id.rbNewGoods:
+                index = 0;
                 ft.replace(R.id.content_layout, new NewGoodsFragment()).commit();
                 break;
             case R.id.rbBoutique:
+                index = 1;
                 ft.replace(R.id.content_layout, new BoutiqueFragment()).commit();
                 break;
             case R.id.rbCategory:
+                index = 2;
                 ft.replace(R.id.content_layout, new CategoryFragment()).commit();
                 break;
+            case R.id.rbCart:
+                if (FuLiCenterApplication.getUserLogin() == null) {
+                    MFGT.gotoLoginActivity(MainActivity.this);
+                } else {
+                    index = 3;
+                }
+                break;
+            case R.id.rbPersonal:
+                if (FuLiCenterApplication.getUserLogin() == null) {
+                    MFGT.gotoLoginActivity(MainActivity.this);
+                } else {
+                    index = 4;
+                }
+                break;
+
+        }
+        currentIndex = index;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setRadioButton();
+    }
+
+    private void setRadioButton() {
+        for (int i=0;i<mRadioButtons.length;i++) {
+            if (i == index) {
+                mRadioButtons[i].setChecked(true);
+            }
         }
     }
 
