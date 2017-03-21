@@ -35,16 +35,14 @@ public class MainActivity extends AppCompatActivity {
     Unbinder bind;
     RadioButton[] mRadioButtons;
     int index;
-    int currentIndex;
+    FragmentTransaction ft;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         bind = ButterKnife.bind(this);
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.content_layout, new NewGoodsFragment())
-                .commit();
+        ft = getSupportFragmentManager().beginTransaction();
         initRadioButton();
     }
 
@@ -58,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onCheckedChange(View view) {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+
         switch (view.getId()) {
             case R.id.rbNewGoods:
                 index = 0;
@@ -88,17 +86,23 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
         }
-        currentIndex = index;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        if (index == 4) {
+            if (FuLiCenterApplication.getUserLogin() == null) {
+                index = 0;
+                ft.replace(R.id.content_layout, new NewGoodsFragment());
+            }
+            ft.replace(R.id.content_layout, new PersonCenterFragment());
+        }
         setRadioButton();
     }
 
     private void setRadioButton() {
-        for (int i=0;i<mRadioButtons.length;i++) {
+        for (int i = 0; i < mRadioButtons.length; i++) {
             if (i == index) {
                 mRadioButtons[i].setChecked(true);
             }

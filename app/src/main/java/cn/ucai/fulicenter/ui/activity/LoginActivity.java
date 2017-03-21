@@ -114,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                boolean b = UserDao.getInstance(LoginActivity.this).setUserInfo(user);
+               UserDao.getInstance(LoginActivity.this).setUserInfo(user);
 
             }
         }).start();
