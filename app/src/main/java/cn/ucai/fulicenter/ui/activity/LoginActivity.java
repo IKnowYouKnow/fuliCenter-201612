@@ -25,6 +25,7 @@ import cn.ucai.fulicenter.model.utils.CommonUtils;
 import cn.ucai.fulicenter.model.utils.MD5;
 import cn.ucai.fulicenter.model.utils.ResultUtils;
 import cn.ucai.fulicenter.ui.view.MFGT;
+import cn.ucai.fulicenter.ui.view.SharedPreferenceUtils;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -106,6 +107,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loginSuccess(User user) {
         FuLiCenterApplication.setUserLogin(user);
+        SharedPreferenceUtils.getInstance().setUserName(user.getMuserName());
+        MFGT.finish(LoginActivity.this);
     }
 
     private boolean checkInput() {
