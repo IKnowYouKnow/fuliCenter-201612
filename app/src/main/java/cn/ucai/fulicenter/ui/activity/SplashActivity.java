@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.FuLiCenterApplication;
@@ -31,6 +32,7 @@ public class SplashActivity extends AppCompatActivity {
                 if (userName != null) {
                     User userInfo = UserDao.getInstance(SplashActivity.this).getUserInfo(userName);
                     FuLiCenterApplication.setUserLogin(userInfo);
+                    Log.i("main", "user = " + userInfo);
                 }
                 MFGT.gotoMain(SplashActivity.this);
                 MFGT.finish(SplashActivity.this);

@@ -15,6 +15,7 @@ import cn.ucai.fulicenter.application.FuLiCenterApplication;
 import cn.ucai.fulicenter.ui.fragment.BoutiqueFragment;
 import cn.ucai.fulicenter.ui.fragment.CategoryFragment;
 import cn.ucai.fulicenter.ui.fragment.NewGoodsFragment;
+import cn.ucai.fulicenter.ui.fragment.PersonCenterFragment;
 import cn.ucai.fulicenter.ui.view.MFGT;
 
 public class MainActivity extends AppCompatActivity {
@@ -83,9 +84,9 @@ public class MainActivity extends AppCompatActivity {
                     MFGT.gotoLoginActivity(MainActivity.this);
                 } else {
                     index = 4;
+                    ft.replace(R.id.content_layout, new PersonCenterFragment()).commit();
                 }
                 break;
-
         }
         currentIndex = index;
     }

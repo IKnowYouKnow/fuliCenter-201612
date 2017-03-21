@@ -10,13 +10,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBOpenHelper extends SQLiteOpenHelper {
     private static final int VERSION = 1;
-    String CREATE_TABLE_SQL = "create table "+UserDao.TB_NAME+" ("
-            +UserDao.USER_COLUMN_USERNAEM +" text primary key,"
-            +UserDao.USER_COLUMN_AVATAR_ID +" integer,"
-            +UserDao.USER_COLUMN_AVATAR_PATH+" text,"
-            +UserDao.USER_COLUMN_AVATAR_SUFFIX+" text,"
-            +UserDao.USER_COLUMN_AVATAR_TYPE+" integer,"
-            +UserDao.USER_COLUMN_AVATAR_LAST_UPDATETIME+" text" +
+    String CREATE_TABLE_SQL = "create table " + UserDao.TB_NAME + " ("
+            + UserDao.USER_COLUMN_USERNAEM + " text primary key,"
+            + UserDao.USER_COLUMN_NICK + " text,"
+            + UserDao.USER_COLUMN_AVATAR_ID + " integer,"
+            + UserDao.USER_COLUMN_AVATAR_PATH + " text,"
+            + UserDao.USER_COLUMN_AVATAR_SUFFIX + " text,"
+            + UserDao.USER_COLUMN_AVATAR_TYPE + " integer,"
+            + UserDao.USER_COLUMN_AVATAR_LAST_UPDATETIME + " text" +
             ")";
     DBOpenHelper instance;
 
@@ -48,9 +49,8 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     public void closeDB() {
         if (instance != null) {
             SQLiteDatabase database = getWritableDatabase();
-            if (database.isOpen()) {
-                database.close();
-            }
+            database.close();
+            instance = null;
         }
     }
 

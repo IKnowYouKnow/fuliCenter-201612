@@ -94,7 +94,16 @@ public class User {
         return getMavatarLastUpdateTime().equals(user.getMavatarLastUpdateTime());
 
     }
-
+//AVATAR_TYPE + "=" + user.getMavatarType() + I.AND + I.AVATAR_SUFFIX
+// + "=" + user.getMavatarSuffix() + I.AND + "width=200&height=200";
+    public String getAvatarUrl() {
+        StringBuffer sb = new StringBuffer(I.DOWNLOAD_AVATAR_URL);
+        sb.append(I.NAME_OR_HXID).append(I.EQUAL).append(this.getMuserName()).append(I.AND)
+                .append(I.AVATAR_TYPE).append(I.EQUAL).append(this.getMavatarType()).append(I.AND)
+                .append(I.AVATAR_SUFFIX).append(I.EQUAL).append(this.getMavatarSuffix()).append(I.AND)
+                .append("width=200&height=200");
+        return sb.toString();
+    }
     @Override
     public int hashCode() {
         int result = getMuserName().hashCode();
