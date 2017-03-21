@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,6 +25,8 @@ import cn.ucai.fulicenter.model.net.UserModel;
 import cn.ucai.fulicenter.model.utils.CommonUtils;
 import cn.ucai.fulicenter.model.utils.MD5;
 import cn.ucai.fulicenter.model.utils.ResultUtils;
+import cn.ucai.fulicenter.ui.dao.DBManager;
+import cn.ucai.fulicenter.ui.dao.UserDao;
 import cn.ucai.fulicenter.ui.view.MFGT;
 import cn.ucai.fulicenter.ui.view.SharedPreferenceUtils;
 
@@ -105,9 +108,18 @@ public class LoginActivity extends AppCompatActivity {
         pd.show();
     }
 
-    private void loginSuccess(User user) {
+    private void loginSuccess(final User user) {
         FuLiCenterApplication.setUserLogin(user);
         SharedPreferenceUtils.getInstance().setUserName(user.getMuserName());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                boolean b = UserDao.getInstance(LoginActivity.this).setUserInfo(user);
+                Log.i("main","loginSuccess , b = "+ b);
+
+            }
+        }).start();
+        UserDao.getInstance(LoginActivity.this).setUserInfo(user);
         MFGT.finish(LoginActivity.this);
     }
 

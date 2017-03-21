@@ -39,7 +39,7 @@ public class SharedPreferenceUtils {
     }
     // 清除用户信息
     public void removeUser() {
-        editor.clear();
+        editor.remove(SAVE_USERINFO_USERNAME).commit();
     }
 
 }
