@@ -3,6 +3,7 @@ package cn.ucai.fulicenter.ui.view;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 
 import java.util.ArrayList;
 
@@ -16,6 +17,7 @@ import cn.ucai.fulicenter.ui.activity.CategoryChildActivity;
 import cn.ucai.fulicenter.ui.activity.GoodsDetailsActivity;
 import cn.ucai.fulicenter.ui.activity.LoginActivity;
 import cn.ucai.fulicenter.ui.activity.MainActivity;
+import cn.ucai.fulicenter.ui.activity.PersonInfo;
 import cn.ucai.fulicenter.ui.activity.RegisterActivity;
 
 /**
@@ -73,5 +75,9 @@ public class MFGT {
         activity.startActivityForResult(intent,requestCode);
         activity.overridePendingTransition(R.anim.push_right_in,R.anim.push_right_out);
 
+    }
+
+    public static void gotoPersonInfo(Activity activity) {
+        startActivity(activity,PersonInfo.class);
     }
 }

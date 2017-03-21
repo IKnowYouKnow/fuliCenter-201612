@@ -12,11 +12,11 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.FuLiCenterApplication;
 import cn.ucai.fulicenter.model.bean.User;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
-import cn.ucai.fulicenter.ui.dao.UserDao;
 import cn.ucai.fulicenter.ui.view.MFGT;
 
 /**
@@ -45,7 +45,7 @@ public class PersonCenterFragment extends Fragment {
 
     private void showUserInfo() {
         mTvUserName.setText(user.getMuserNick());
-        ImageLoader.downloadImg(getActivity(),mIvUserAvatar,user.getAvatarUrl());
+        ImageLoader.downloadImg(getActivity(), mIvUserAvatar, user.getAvatarUrl());
     }
 
     @Override
@@ -59,4 +59,12 @@ public class PersonCenterFragment extends Fragment {
         }
     }
 
+    @OnClick({R.id.tv_center_settings, R.id.center_user_info})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.tv_center_settings:
+            case R.id.center_user_info:
+                MFGT.gotoPersonInfo(getActivity());
+        }
+    }
 }

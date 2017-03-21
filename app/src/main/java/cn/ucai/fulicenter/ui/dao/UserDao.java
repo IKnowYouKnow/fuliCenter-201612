@@ -3,7 +3,9 @@ package cn.ucai.fulicenter.ui.dao;
 import android.content.Context;
 import android.icu.text.DateFormat;
 
+import cn.ucai.fulicenter.application.FuLiCenterApplication;
 import cn.ucai.fulicenter.model.bean.User;
+import cn.ucai.fulicenter.ui.view.SharedPreferenceUtils;
 
 /**
  * Created by Administrator on 2017/3/21 0021.
@@ -42,6 +44,12 @@ public class UserDao {
 
     public boolean setUserInfo(User user) {
         return DBManager.getInstance().saveUserInfo(user);
+    }
+
+    public void logout() {
+        FuLiCenterApplication.setUserLogin(null);
+        SharedPreferenceUtils.getInstance().removeUser();
+        DBManager.getInstance().closeDB();
     }
 
 }
