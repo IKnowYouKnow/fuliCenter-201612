@@ -23,6 +23,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.application.I;
 
 
 /**
@@ -168,6 +169,7 @@ public class OnSetAvatarListener implements View.OnClickListener {
      * @param ivAvatar
      */
     public void setAvatar(int requestCode, Intent data, ImageView ivAvatar) {
+
         switch (requestCode) {
             case REQUEST_CHOOSE_PHOTO:
                 if (data != null) {
@@ -184,6 +186,7 @@ public class OnSetAvatarListener implements View.OnClickListener {
                 closePopuAvatar();
                 break;
         }
+        mActivity.setResult(Activity.RESULT_OK);
     }
 
     /**

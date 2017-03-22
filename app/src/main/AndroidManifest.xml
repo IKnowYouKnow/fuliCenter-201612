@@ -3,6 +3,9 @@
           package="cn.ucai.fulicenter">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.MOUNT_FORMAT_FILESYSTEMS"/>
 
     <application
         android:name=".application.FuLiCenterApplication"
@@ -25,6 +28,7 @@
         <activity android:name=".ui.activity.LoginActivity"/>
         <activity android:name=".ui.activity.RegisterActivity"/>
         <activity android:name=".ui.activity.PersonInfo"/>
+        <activity android:name=".ui.activity.UpdateNickActivity"/>
     </application>
 
 </manifest>
