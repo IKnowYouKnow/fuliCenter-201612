@@ -1,6 +1,7 @@
 package cn.ucai.fulicenter.ui.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,19 +59,34 @@ public class UpdateNickActivity extends AppCompatActivity {
         mEtNewNick.setText(user.getMuserNick());
         mEtNewNick.selectAll();
         mTvTitle.setText(R.string.update_user_nick);
+        mEtNewNick.setFocusable(true);
+        mEtNewNick.setFocusableInTouchMode(true);
+        mEtNewNick.requestFocus();
 
+        Timer timer = new Timer();
 
+        timer.schedule(new TimerTask()
+                       {
+                           public void run()
+                           {
+                               InputMethodManager inputManager =
+                                       (InputMethodManager)mEtNewNick.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                               inputManager.showSoftInput(mEtNewNick, 0);
+                           }
+                       },
+                998);
     }
 
     @OnClick({R.id.ivBack, R.id.btnSave})
     public void onClick(View view) {
-        showDialog();
+
         switch (view.getId()) {
             case R.id.ivBack:
                 MFGT.finish(UpdateNickActivity.this);
                 break;
             case R.id.btnSave:
                 if (checkInput()) {
+                    showDialog();
                     mModel.updateNick(UpdateNickActivity.this, user.getMuserName(), nick,
                             new OnCompleteListener<String>() {
                                 @Override
@@ -105,7 +124,7 @@ public class UpdateNickActivity extends AppCompatActivity {
 
     private void showDialog() {
         pd = new ProgressDialog(UpdateNickActivity.this);
-        pd.setMessage(getString(R.string.logining));
+        pd.setMessage("保存中...");
         pd.show();
     }
 
