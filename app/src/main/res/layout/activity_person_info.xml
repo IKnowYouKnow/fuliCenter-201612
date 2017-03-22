@@ -79,6 +79,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/nick"
         android:layout_below="@id/name"
         android:layout_marginTop="5dp"
         android:layout_width="match_parent"

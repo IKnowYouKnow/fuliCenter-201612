@@ -120,8 +120,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private void setFragment(){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         if (currentIndex != index) {
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.hide(fragments[currentIndex]);
             if (!fragments[index].isAdded()) {
                 ft.add(R.id.content_layout, fragments[index]);
@@ -133,11 +133,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+//        super.onActivityResult(requestCode, resultCode, data);
+
         if (resultCode == RESULT_OK) {
             if (requestCode == I.REQUEST_CODE_LOGIN) {
                 index = 4;
-
             }
             if (requestCode == I.REQUEST_CODE_LOGIN_FROM_CART) {
                 index = 3;

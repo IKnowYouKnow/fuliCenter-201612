@@ -114,11 +114,14 @@ public class LoginActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-               UserDao.getInstance(LoginActivity.this).setUserInfo(user);
-               setResult(RESULT_OK);
+                boolean loginSuccess = UserDao.getInstance(LoginActivity.this).setUserInfo(user);
+                if (loginSuccess) {
+                    setResult(RESULT_OK);
+                    MFGT.finish(LoginActivity.this);
+                }
             }
         }).start();
-        MFGT.finish(LoginActivity.this);
+
     }
 
     private boolean checkInput() {
