@@ -15,10 +15,8 @@ import cn.ucai.fulicenter.application.FuLiCenterApplication;
 import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.bean.User;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
-import cn.ucai.fulicenter.ui.dao.DBManager;
 import cn.ucai.fulicenter.ui.dao.UserDao;
 import cn.ucai.fulicenter.ui.view.MFGT;
-import cn.ucai.fulicenter.ui.view.SharedPreferenceUtils;
 
 /**
  * Created by Administrator on 2017/3/21 0021.
@@ -54,6 +52,12 @@ public class PersonInfo extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
+    }
+
     @OnClick(R.id.ivBack)
     public void onBack(View view) {
         MFGT.finish(PersonInfo.this);
@@ -64,5 +68,10 @@ public class PersonInfo extends AppCompatActivity {
         UserDao.getInstance(PersonInfo.this).logout();
         MFGT.gotoLoginActivity(PersonInfo.this, I.REQUEST_CODE_LOGIN);
         MFGT.finish(PersonInfo.this);
+    }
+
+    @OnClick(R.id.nick)
+    public void updateNick() {
+        MFGT.gotoUpdateNickActivity(PersonInfo.this);
     }
 }

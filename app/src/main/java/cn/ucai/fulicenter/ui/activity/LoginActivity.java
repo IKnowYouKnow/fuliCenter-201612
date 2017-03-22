@@ -118,7 +118,6 @@ public class LoginActivity extends AppCompatActivity {
                setResult(RESULT_OK);
             }
         }).start();
-        UserDao.getInstance(LoginActivity.this).setUserInfo(user);
         MFGT.finish(LoginActivity.this);
     }
 

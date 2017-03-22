@@ -19,6 +19,7 @@ import cn.ucai.fulicenter.ui.activity.LoginActivity;
 import cn.ucai.fulicenter.ui.activity.MainActivity;
 import cn.ucai.fulicenter.ui.activity.PersonInfo;
 import cn.ucai.fulicenter.ui.activity.RegisterActivity;
+import cn.ucai.fulicenter.ui.activity.UpdateNickActivity;
 
 /**
  * Created by Administrator on 2017/3/16 0016.
@@ -79,5 +80,9 @@ public class MFGT {
 
     public static void gotoPersonInfo(Activity activity) {
         startActivity(activity,PersonInfo.class);
+    }
+
+    public static void gotoUpdateNickActivity(Activity activity) {
+        startActivity(activity,UpdateNickActivity.class);
     }
 }
