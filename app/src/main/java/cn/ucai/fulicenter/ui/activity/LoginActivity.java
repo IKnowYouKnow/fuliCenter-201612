@@ -115,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void run() {
                UserDao.getInstance(LoginActivity.this).setUserInfo(user);
-
+               setResult(RESULT_OK);
             }
         }).start();
         UserDao.getInstance(LoginActivity.this).setUserInfo(user);

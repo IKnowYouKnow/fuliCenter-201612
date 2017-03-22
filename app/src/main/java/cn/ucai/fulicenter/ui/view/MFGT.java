@@ -62,8 +62,8 @@ public class MFGT {
         .putExtra(I.CategoryChild.DATA,childList));
     }
 
-    public static void gotoLoginActivity(Activity activity) {
-        startActivity(activity,LoginActivity.class);
+    public static void gotoLoginActivity(Activity activity,int requestCode) {
+        startActivityForResult(activity,new Intent(activity,LoginActivity.class),requestCode);
     }
 
     public static void gotoRegisterActivity(Activity activity) {

@@ -12,6 +12,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.FuLiCenterApplication;
+import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.bean.User;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
 import cn.ucai.fulicenter.ui.dao.DBManager;
@@ -61,7 +62,7 @@ public class PersonInfo extends AppCompatActivity {
     @OnClick(R.id.btnExit)
     public void onClick() {
         UserDao.getInstance(PersonInfo.this).logout();
-        MFGT.gotoLoginActivity(PersonInfo.this);
+        MFGT.gotoLoginActivity(PersonInfo.this, I.REQUEST_CODE_LOGIN);
         MFGT.finish(PersonInfo.this);
     }
 }
