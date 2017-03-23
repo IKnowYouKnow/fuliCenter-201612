@@ -14,11 +14,39 @@
 
         <TextView
             android:id="@+id/tvTitle"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:text="商品详情"
             android:textColor="@color/white"
             android:textSize="18sp"
             />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/ivShare"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="10dp"
+                    android:background="@mipmap/bg_share_nor"/>
+                <ImageView
+                    android:id="@+id/ivCollect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@id/ivShare"
+                    android:background="@mipmap/bg_collect_in"
+                    android:layout_centerVertical="true"
+                    />
+                <ImageView
+                    android:id="@+id/ivCart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@id/ivCollect"
+                    android:layout_margin="10dp"
+                    android:background="@mipmap/bg_cart_selected"/>
+        </RelativeLayout>
 </LinearLayout>

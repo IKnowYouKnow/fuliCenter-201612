@@ -12,9 +12,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.application.FuLiCenterApplication;
 import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.bean.AlbumsBean;
 import cn.ucai.fulicenter.model.bean.GoodsDetailsBean;
+import cn.ucai.fulicenter.model.bean.MessageBean;
+import cn.ucai.fulicenter.model.bean.User;
 import cn.ucai.fulicenter.model.net.GoodsModel;
 import cn.ucai.fulicenter.model.net.IGoodsModel;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
@@ -45,6 +48,8 @@ public class GoodsDetailsActivity extends AppCompatActivity {
     FlowIndicator mIndicator;
     @BindView(R.id.wvDetails)
     WebView mWvDetails;
+    @BindView(R.id.ivCollect)
+    ImageView mIvCollect;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,9 +70,9 @@ public class GoodsDetailsActivity extends AppCompatActivity {
             @Override
             public void onSuccess(GoodsDetailsBean result) {
                 if (result != null) {
+                    loadCollectStatus();
                     showDetails(result);
                 }
-
             }
 
             @Override
@@ -77,6 +82,31 @@ public class GoodsDetailsActivity extends AppCompatActivity {
         });
     }
 
+    private void loadCollectStatus() {
+        User user = FuLiCenterApplication.getUserLogin();
+        if (user != null) {
+            mModel.loadCollectStatus(GoodsDetailsActivity.this, goodsId, user.getMuserName(),
+                    new OnCompleteListener<MessageBean>() {
+                        @Override
+                        public void onSuccess(MessageBean msg) {
+                            if (msg != null && msg.isSuccess()) {
+                                setCollectStatus(true);
+                            } else {
+                                setCollectStatus(false);
+                            }
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            setCollectStatus(false);
+                        }
+                    });
+        }
+    }
+
+    private void setCollectStatus(boolean b) {
+        mIvCollect.setImageResource(b ? R.mipmap.bg_collect_out : R.mipmap.bg_collect_in);
+    }
     private void showDetails(GoodsDetailsBean bean) {
         mTvGoodsNameEN.setText(bean.getGoodsEnglishName());
         mTvGoodsNameCH.setText(bean.getGoodsName());
@@ -94,7 +124,7 @@ public class GoodsDetailsActivity extends AppCompatActivity {
             AlbumsBean[] albums = bean.getProperties()[0].getAlbums();
             if (albums != null && albums.length > 0) {
                 String[] urls = new String[albums.length];
-                for (int i=0;i<albums.length;i++) {
+                for (int i = 0; i < albums.length; i++) {
                     urls[i] = albums[0].getImgUrl();
                 }
                 return urls;
