@@ -1,5 +1,6 @@
 package cn.ucai.fulicenter.ui.activity;
 
+import android.net.rtp.RtpStream;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -50,6 +51,8 @@ public class GoodsDetailsActivity extends AppCompatActivity {
     WebView mWvDetails;
     @BindView(R.id.ivCollect)
     ImageView mIvCollect;
+    boolean isCollect = false;
+    User user;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,30 +86,54 @@ public class GoodsDetailsActivity extends AppCompatActivity {
     }
 
     private void loadCollectStatus() {
-        User user = FuLiCenterApplication.getUserLogin();
+        user = FuLiCenterApplication.getUserLogin();
         if (user != null) {
-            mModel.loadCollectStatus(GoodsDetailsActivity.this, goodsId, user.getMuserName(),
-                    new OnCompleteListener<MessageBean>() {
-                        @Override
-                        public void onSuccess(MessageBean msg) {
-                            if (msg != null && msg.isSuccess()) {
-                                setCollectStatus(true);
-                            } else {
-                                setCollectStatus(false);
-                            }
-                        }
+            setCollectAction(I.ACTION_IS_COLLECT, user);
 
-                        @Override
-                        public void onError(String error) {
-                            setCollectStatus(false);
-                        }
-                    });
         }
     }
 
-    private void setCollectStatus(boolean b) {
-        mIvCollect.setImageResource(b ? R.mipmap.bg_collect_out : R.mipmap.bg_collect_in);
+    private void setCollectAction(final int action, User user) {
+        mModel.collectAction(GoodsDetailsActivity.this, action, goodsId, user.getMuserName(),
+                new OnCompleteListener<MessageBean>() {
+                    @Override
+                    public void onSuccess(MessageBean msg) {
+                        if (msg != null && msg.isSuccess()) {
+                            isCollect = action==I.ACTION_DELETE_COLLECT?false:true;
+                            if (action == I.ACTION_ADD_COLLECT) {
+                                CommonUtils.showShortToast(R.string.add_collect_success);
+                            } else if (action == I.ACTION_DELETE_COLLECT) {
+                                CommonUtils.showShortToast(R.string.delete_collect_success);
+                            }
+
+                        } else {
+                            if (action == I.ACTION_ADD_COLLECT) {
+                                CommonUtils.showShortToast(R.string.add_collect_fail);
+                            } else if (action == I.ACTION_DELETE_COLLECT) {
+                                CommonUtils.showShortToast(R.string.delete_collect_fail);
+                            }
+                            isCollect = action==I.ACTION_DELETE_COLLECT?true:false;
+                        }
+                        setCollectStatus();
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        isCollect = action==I.ACTION_DELETE_COLLECT?true:false;
+                        if (action == I.ACTION_ADD_COLLECT) {
+                            CommonUtils.showShortToast(R.string.add_collect_fail);
+                        } else if (action == I.ACTION_DELETE_COLLECT) {
+                            CommonUtils.showShortToast(R.string.delete_collect_fail);
+                        }
+                        setCollectStatus();
+                    }
+                });
     }
+
+    private void setCollectStatus() {
+        mIvCollect.setImageResource(isCollect ? R.mipmap.bg_collect_out : R.mipmap.bg_collect_in);
+    }
+
     private void showDetails(GoodsDetailsBean bean) {
         mTvGoodsNameEN.setText(bean.getGoodsEnglishName());
         mTvGoodsNameCH.setText(bean.getGoodsName());
@@ -144,6 +171,15 @@ public class GoodsDetailsActivity extends AppCompatActivity {
         super.onDestroy();
         if (bind != null) {
             bind.unbind();
+        }
+    }
+
+    @OnClick(R.id.ivCollect)
+    public void onCollect() {
+        if (isCollect) {
+            setCollectAction(I.ACTION_DELETE_COLLECT, user);
+        } else {
+            setCollectAction(I.ACTION_ADD_COLLECT,user);
         }
     }
 }

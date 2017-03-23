@@ -13,6 +13,6 @@ import cn.ucai.fulicenter.model.bean.NewGoodsBean;
 public interface IGoodsModel {
     void loadData(Context context,int goodsId, OnCompleteListener<GoodsDetailsBean> listener);
 
-    void loadCollectStatus(Context context, int goodsId,
+    void collectAction(Context context,int action, int goodsId,
                            String username, OnCompleteListener<MessageBean> listener);
 }
