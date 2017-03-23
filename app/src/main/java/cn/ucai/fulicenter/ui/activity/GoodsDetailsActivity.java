@@ -101,19 +101,11 @@ public class GoodsDetailsActivity extends AppCompatActivity {
                     public void onSuccess(MessageBean msg) {
                         if (msg != null && msg.isSuccess()) {
                             isCollect = action==I.ACTION_DELETE_COLLECT?false:true;
-                            if (action == I.ACTION_ADD_COLLECT) {
-                                CommonUtils.showShortToast(R.string.add_collect_success);
-                            } else if (action == I.ACTION_DELETE_COLLECT) {
-                                CommonUtils.showShortToast(R.string.delete_collect_success);
+                            if (action != I.ACTION_IS_COLLECT) {
+                                CommonUtils.showShortToast(msg.getMsg());
                             }
-
                         } else {
-                            if (action == I.ACTION_ADD_COLLECT) {
-                                CommonUtils.showShortToast(R.string.add_collect_fail);
-                            } else if (action == I.ACTION_DELETE_COLLECT) {
-                                CommonUtils.showShortToast(R.string.delete_collect_fail);
-                            }
-                            isCollect = action==I.ACTION_DELETE_COLLECT?true:false;
+                            isCollect = action==I.ACTION_IS_COLLECT?false:isCollect;
                         }
                         setCollectStatus();
                     }
@@ -121,11 +113,6 @@ public class GoodsDetailsActivity extends AppCompatActivity {
                     @Override
                     public void onError(String error) {
                         isCollect = action==I.ACTION_DELETE_COLLECT?true:false;
-                        if (action == I.ACTION_ADD_COLLECT) {
-                            CommonUtils.showShortToast(R.string.add_collect_fail);
-                        } else if (action == I.ACTION_DELETE_COLLECT) {
-                            CommonUtils.showShortToast(R.string.delete_collect_fail);
-                        }
                         setCollectStatus();
                     }
                 });
