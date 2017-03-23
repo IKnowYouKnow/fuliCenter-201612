@@ -3,6 +3,7 @@ package cn.ucai.fulicenter.ui.activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -21,6 +22,13 @@ public class BoutiqueChildActivity extends AppCompatActivity {
     @BindView(R.id.tvTitle)
     TextView mTvTitle;
     Unbinder bind;
+    @BindView(R.id.ivShare)
+    ImageView mIvShare;
+    @BindView(R.id.ivCollect)
+    ImageView mIvCollect;
+    @BindView(R.id.ivCart)
+    ImageView mIvCart;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +38,9 @@ public class BoutiqueChildActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.content_layout, new NewGoodsFragment())
                 .commit();
-
+        mIvCart.setVisibility(View.GONE);
+        mIvCollect.setVisibility(View.GONE);
+        mIvShare.setVisibility(View.GONE);
         String title = getIntent().getStringExtra("title");
         mTvTitle.setText(title);
     }
