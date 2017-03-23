@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,7 +22,9 @@ import cn.ucai.fulicenter.model.bean.Result;
 import cn.ucai.fulicenter.model.bean.User;
 import cn.ucai.fulicenter.model.net.IUserModel;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
+import cn.ucai.fulicenter.model.net.UserModel;
 import cn.ucai.fulicenter.model.utils.CommonUtils;
+import cn.ucai.fulicenter.model.utils.FileUtils;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
 import cn.ucai.fulicenter.model.utils.OnSetAvatarListener;
 import cn.ucai.fulicenter.model.utils.ResultUtils;
@@ -41,6 +44,7 @@ public class PersonInfo extends AppCompatActivity {
     TextView mTvUserName;
     @BindView(R.id.tvNick)
     TextView mTvNick;
+
     User user;
 
     OnSetAvatarListener mSetAvatarListener;
@@ -54,6 +58,7 @@ public class PersonInfo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_info);
         ButterKnife.bind(this);
+        mModel = new UserModel();
         initData();
     }
 
@@ -63,7 +68,7 @@ public class PersonInfo extends AppCompatActivity {
             mTvTitle.setText(R.string.user_profile);
             mTvUserName.setText(user.getMuserName());
             mTvNick.setText(user.getMuserNick());
-            ImageLoader.setAvatar(ImageLoader.getAvatarUrl(user),
+            ImageLoader.setAvatar(user.getAvatarUrl(),
                     PersonInfo.this,mIvAvatar);
         }else {
             onBack();
@@ -97,8 +102,9 @@ public class PersonInfo extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.avatar:
+                avatarName = getAvatarName();
                 mSetAvatarListener = new OnSetAvatarListener(PersonInfo.this,
-                        R.id.ivAvatar,getAvatarName(),I.AVATAR_TYPE_USER_PATH);
+                        R.id.ivAvatar,avatarName,I.AVATAR_TYPE_USER_PATH);
                 break;
             case R.id.name:
                 CommonUtils.showShortToast(R.string.username_connot_be_modify);
@@ -109,12 +115,10 @@ public class PersonInfo extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
+        Log.i("main", "PersonInfo.data=" + data.getExtras());
             mSetAvatarListener.setAvatar(requestCode, data, mIvAvatar);
             if (requestCode == OnSetAvatarListener.REQUEST_CROP_PHOTO) {
-                File file = mSetAvatarListener.getAvatarFile(PersonInfo.this, avatarName);
-                uploadAvatar(file);
-            }
+                uploadAvatar();
         }
     }
 
@@ -124,8 +128,10 @@ public class PersonInfo extends AppCompatActivity {
         pd.show();
     }
 
-    private void uploadAvatar(File file) {
+    private void uploadAvatar() {
         showDialog();
+        File file = FileUtils.getAvatarPath(PersonInfo.this,I.AVATAR_TYPE_USER_PATH,
+                avatarName+I.AVATAR_SUFFIX_JPG);
         mModel.uploadAvatar(PersonInfo.this, user.getMuserName(), file, new OnCompleteListener<String>() {
             @Override
             public void onSuccess(String r) {
@@ -133,9 +139,7 @@ public class PersonInfo extends AppCompatActivity {
                 if (result != null) {
                     if (result.isRetMsg()) {
                         User u = (User) result.getRetData();
-                        if (u != null) {
                             updateSuccess(u);
-                        }
 
                     } else {
                         if (result.getRetCode() == I.MSG_UPLOAD_AVATAR_FAIL) {
@@ -156,6 +160,7 @@ public class PersonInfo extends AppCompatActivity {
 
     private void updateSuccess(final User u) {
         CommonUtils.showShortToast(R.string.update_user_avatar_success);
+        FuLiCenterApplication.setUserLogin(u);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -163,11 +168,10 @@ public class PersonInfo extends AppCompatActivity {
             }
         }).start();
         initData();
-        MFGT.finish(PersonInfo.this);
     }
 
     private String getAvatarName() {
-        avatarName = user.getMuserName()+System.currentTimeMillis()+I.AVATAR_SUFFIX_JPG;
+        avatarName = user.getMuserName()+System.currentTimeMillis();
         return avatarName;
     }
 }

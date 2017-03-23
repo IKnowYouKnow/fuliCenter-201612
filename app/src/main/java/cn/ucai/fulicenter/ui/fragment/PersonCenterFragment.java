@@ -53,7 +53,7 @@ public class PersonCenterFragment extends Fragment {
 
     private void showUserInfo() {
         mTvUserName.setText(user.getMuserNick());
-        ImageLoader.downloadImg(getActivity(), mIvUserAvatar, user.getAvatarUrl());
+        ImageLoader.setAvatar(user.getAvatarUrl(),getActivity(), mIvUserAvatar);
     }
 
     @Override

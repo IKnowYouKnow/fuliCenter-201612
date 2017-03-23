@@ -170,6 +170,7 @@ public class OnSetAvatarListener implements View.OnClickListener {
      */
     public void setAvatar(int requestCode, Intent data, ImageView ivAvatar) {
 
+        Log.i("main", data.getData()+"setAvatar");
         switch (requestCode) {
             case REQUEST_CHOOSE_PHOTO:
                 if (data != null) {
@@ -186,7 +187,6 @@ public class OnSetAvatarListener implements View.OnClickListener {
                 closePopuAvatar();
                 break;
         }
-        mActivity.setResult(Activity.RESULT_OK);
     }
 
     /**
@@ -195,6 +195,7 @@ public class OnSetAvatarListener implements View.OnClickListener {
      * @param data
      */
     private void saveCropAndShowAvatar(ImageView ivAvatar, Intent data) {
+        Log.i("main", data.getExtras() + "");
         Bundle extras = data.getExtras();
         Bitmap avatar = extras.getParcelable("data");
         if (avatar == null) {
@@ -257,6 +258,7 @@ public class OnSetAvatarListener implements View.OnClickListener {
         intent.putExtra("return-data", true);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+        Log.i("main", "startCropPhotoActivity.data" + intent.getExtras());
         mActivity.startActivityForResult(intent,requestCode);
     }
 
