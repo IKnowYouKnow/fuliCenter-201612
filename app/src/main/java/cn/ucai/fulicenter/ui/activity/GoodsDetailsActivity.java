@@ -70,8 +70,8 @@ public class GoodsDetailsActivity extends AppCompatActivity {
             @Override
             public void onSuccess(GoodsDetailsBean result) {
                 if (result != null) {
-                    loadCollectStatus();
                     showDetails(result);
+                    loadCollectStatus();
                 }
             }
 

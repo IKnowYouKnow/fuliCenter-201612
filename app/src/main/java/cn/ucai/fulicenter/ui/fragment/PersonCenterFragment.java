@@ -71,8 +71,8 @@ public class PersonCenterFragment extends Fragment {
     private void initData() {
         user = FuLiCenterApplication.getUserLogin();
         if (user != null) {
-            loadCollectCount();
             showUserInfo();
+            loadCollectCount();
         }
     }
 
