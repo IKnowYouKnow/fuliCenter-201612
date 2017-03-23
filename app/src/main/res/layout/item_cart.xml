@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:background="@color/white"
+              android:layout_height="60dp">
+    <ImageView
+        style="@style/menu_item_style_cart"
+        android:background="@mipmap/checkbox_normal"/>
+    <ImageView
+        style="@style/menu_item_style_cart"
+        android:background="@drawable/nopic"/>
+    <LinearLayout
+        android:orientation="vertical"
+        style="@style/menu_item_style_cart">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="商品名称"/>
+
+    </LinearLayout>
+</LinearLayout>

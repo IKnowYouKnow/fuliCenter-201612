@@ -102,4 +102,8 @@ public class PersonCenterFragment extends Fragment {
                 MFGT.gotoPersonInfo(getActivity());
         }
     }
+    @OnClick(R.id.layout_center_collect)
+    public void collectList(){
+        MFGT.gotoCollectActivity(getActivity());
+    }
 }

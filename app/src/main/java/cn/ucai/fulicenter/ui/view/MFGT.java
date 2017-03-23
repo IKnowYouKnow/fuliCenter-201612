@@ -14,6 +14,7 @@ import cn.ucai.fulicenter.model.bean.CategoryChildBean;
 import cn.ucai.fulicenter.model.bean.NewGoodsBean;
 import cn.ucai.fulicenter.ui.activity.BoutiqueChildActivity;
 import cn.ucai.fulicenter.ui.activity.CategoryChildActivity;
+import cn.ucai.fulicenter.ui.activity.CollectActivity;
 import cn.ucai.fulicenter.ui.activity.GoodsDetailsActivity;
 import cn.ucai.fulicenter.ui.activity.LoginActivity;
 import cn.ucai.fulicenter.ui.activity.MainActivity;
@@ -51,9 +52,9 @@ public class MFGT {
         .putExtra(I.Boutique.TITLE,bean.getTitle()));
     }
 
-    public static void gotoGoodsDetailActivity(Context activity, NewGoodsBean bean) {
+    public static void gotoGoodsDetailActivity(Context activity, int catId) {
         startActivity((Activity) activity, new Intent(activity, GoodsDetailsActivity.class)
-                .putExtra(I.Goods.KEY_GOODS_ID, bean.getGoodsId()));
+                .putExtra(I.Goods.KEY_GOODS_ID, catId));
     }
 
     public static void gotoCategoryChildActivity(Context context, int catId, String groupName, ArrayList<CategoryChildBean> childList) {
@@ -84,5 +85,9 @@ public class MFGT {
 
     public static void gotoUpdateNickActivity(Activity activity) {
         startActivity(activity,UpdateNickActivity.class);
+    }
+
+    public static void gotoCollectActivity(Activity activity) {
+        startActivity(activity,CollectActivity.class);
     }
 }
