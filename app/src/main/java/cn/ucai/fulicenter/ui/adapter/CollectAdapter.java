@@ -8,16 +8,23 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.application.FuLiCenterApplication;
 import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.bean.CollectBean;
-import cn.ucai.fulicenter.model.bean.NewGoodsBean;
+import cn.ucai.fulicenter.model.bean.MessageBean;
 import cn.ucai.fulicenter.model.bean.User;
+import cn.ucai.fulicenter.model.net.GoodsModel;
+import cn.ucai.fulicenter.model.net.IGoodsModel;
+import cn.ucai.fulicenter.model.net.IUserModel;
+import cn.ucai.fulicenter.model.net.OnCompleteListener;
+import cn.ucai.fulicenter.model.net.UserModel;
+import cn.ucai.fulicenter.model.utils.CommonUtils;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
 import cn.ucai.fulicenter.ui.view.MFGT;
 
@@ -29,7 +36,9 @@ public class CollectAdapter extends RecyclerView.Adapter {
     ArrayList<CollectBean> mCollectList;
     Context mContext;
     boolean isMore;
+
     private String textFooter;
+    IGoodsModel mModel;
 
 
     public void setTextFooter(String textFooter) {
@@ -82,6 +91,7 @@ public class CollectAdapter extends RecyclerView.Adapter {
     public int getItemCount() {
         return mCollectList != null ? mCollectList.size() + 1 : 0;
     }
+
     @Override
     public int getItemViewType(int position) {
         if (getItemCount() - 1 == position) {
@@ -100,27 +110,52 @@ public class CollectAdapter extends RecyclerView.Adapter {
         }
     }
 
-    class ItemHolder  extends RecyclerView.ViewHolder{
+    class ItemHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tvPic)
         ImageView mTvPic;
         @BindView(R.id.tvNewGoodsName)
         TextView mTvNewGoodsName;
         @BindView(R.id.layout_goods)
         LinearLayout mLayoutGoods;
+        @BindView(R.id.btnRemoveCollect)
+        ImageView mRemoveCollect;
 
         ItemHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
 
-        public void bind(int position,final CollectBean user) {
+
+        public void bind(final int position, final CollectBean user) {
             mTvNewGoodsName.setText(user.getGoodsName());
             ImageLoader.downloadImg(mContext, mTvPic, user.getGoodsThumb());
 
-           itemView.setOnClickListener(new View.OnClickListener() {
+            itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     MFGT.gotoGoodsDetailActivity(mContext, user.getGoodsId());
+                }
+            });
+            mRemoveCollect.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mModel = new GoodsModel();
+                    String username = FuLiCenterApplication.getUserLogin().getMuserName();
+                    mModel.collectAction(mContext, I.ACTION_DELETE_COLLECT, user.getGoodsId(), username,
+                            new OnCompleteListener<MessageBean>() {
+                                @Override
+                                public void onSuccess(MessageBean result) {
+                                    if (result != null && result.isSuccess()) {
+                                        mCollectList.remove(position);
+                                        notifyDataSetChanged();
+                                        CommonUtils.showShortToast(result.getMsg());
+                                    }
+                                }
+                                @Override
+                                public void onError(String error) {
+                                    CommonUtils.showShortToast(R.string.delete_collect_fail);
+                                }
+                            });
                 }
             });
         }
