@@ -12,18 +12,14 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.FuLiCenterApplication;
 import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.bean.CollectBean;
 import cn.ucai.fulicenter.model.bean.MessageBean;
-import cn.ucai.fulicenter.model.bean.User;
 import cn.ucai.fulicenter.model.net.GoodsModel;
 import cn.ucai.fulicenter.model.net.IGoodsModel;
-import cn.ucai.fulicenter.model.net.IUserModel;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
-import cn.ucai.fulicenter.model.net.UserModel;
 import cn.ucai.fulicenter.model.utils.CommonUtils;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
 import cn.ucai.fulicenter.ui.view.MFGT;

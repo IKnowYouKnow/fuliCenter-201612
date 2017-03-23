@@ -106,6 +106,16 @@ public class CollectActivity extends AppCompatActivity {
         mAdapter = new CollectAdapter(CollectActivity.this, mGoodsList);
         mrvNewGoods.setAdapter(mAdapter);
         mrvNewGoods.addItemDecoration(new SpaceItemDecoration(20));
+        mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup(){
+            @Override
+            public int getSpanSize(int position) {
+                int viewType = mAdapter.getItemViewType(position);
+                if (viewType == I.TYPE_FOOTER) {
+                    return 2;
+                }
+                return 1;
+            }
+        });
     }
 
     private void initData(int pageId,final int action) {
