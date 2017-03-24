@@ -164,12 +164,16 @@ public class GoodsDetailsActivity extends AppCompatActivity {
 
     @OnClick(R.id.ivCollect)
     public void onCollect() {
+        User user = FuLiCenterApplication.getUserLogin();
+        if (user == null) {
+            MFGT.gotoLoginActivity(GoodsDetailsActivity.this,I.REQUEST_CODE_LOGIN);
+        }
         if (util.check())
             return;
         if (isCollect) {
-            setCollectAction(I.ACTION_DELETE_COLLECT, user);
+            setCollectAction(I.ACTION_DELETE_COLLECT, this.user);
         } else {
-            setCollectAction(I.ACTION_ADD_COLLECT,user);
+            setCollectAction(I.ACTION_ADD_COLLECT, this.user);
         }
     }
 }

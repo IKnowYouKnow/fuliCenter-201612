@@ -6,6 +6,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,29 +48,32 @@ public class CollectActivity extends AppCompatActivity {
     RecyclerView mrvNewGoods;
     @BindView(R.id.srl)
     SwipeRefreshLayout msrl;
-
+    User user;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_new_goods);
-        mBind= ButterKnife.bind(this);
+        mBind = ButterKnife.bind(this);
         mModel = new UserModel();
         initView();
-        initData(mPageId,I.ACTION_DOWNLOAD);
+        user = FuLiCenterApplication.getUserLogin();
+
+        initData(mPageId, I.ACTION_DOWNLOAD);
         setListener();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        initData(mPageId,I.ACTION_DOWNLOAD);
+        initData(mPageId, I.ACTION_DOWNLOAD);
     }
 
     private void setListener() {
         setPullDownListener();
         setPulUpListener();
     }
+
     private void setPulUpListener() {
         mrvNewGoods.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -92,11 +96,12 @@ public class CollectActivity extends AppCompatActivity {
             public void onRefresh() {
                 mGoodsList.clear();
                 mPageId = 1;
-                initData(mPageId, I.ACTION_PULL_DOWN);
                 mtvRefreshHint.setVisibility(View.VISIBLE);
+                initData(mPageId, I.ACTION_PULL_DOWN);
             }
         });
     }
+
     private void initView() {
         mLayoutManager = new GridLayoutManager(CollectActivity.this, I.COLUM_NUM);
         mrvNewGoods.setLayoutManager(mLayoutManager);
@@ -106,7 +111,7 @@ public class CollectActivity extends AppCompatActivity {
         mAdapter = new CollectAdapter(CollectActivity.this, mGoodsList);
         mrvNewGoods.setAdapter(mAdapter);
         mrvNewGoods.addItemDecoration(new SpaceItemDecoration(20));
-        mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup(){
+        mLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
                 int viewType = mAdapter.getItemViewType(position);
@@ -118,23 +123,26 @@ public class CollectActivity extends AppCompatActivity {
         });
     }
 
-    private void initData(int pageId,final int action) {
-        User user = FuLiCenterApplication.getUserLogin();
+    private void initData(final int pageId, final int action) {
+
         if (user != null) {
+
             mModel.loadCollects(CollectActivity.this, user.getMuserName(), pageId, I.PAGE_SIZE_DEFAULT,
                     new OnCompleteListener<CollectBean[]>() {
                         @Override
                         public void onSuccess(CollectBean[] result) {
-
                             mAdapter.setMore(result != null && result.length > 0);
                             if (!mAdapter.isMore()) {
-                                if (action == I.ACTION_PULL_UP) {
+                                mAdapter.setTextFooter("没有更多数据了");
+                                msrl.setRefreshing(false);
+                                mtvRefreshHint.setVisibility(View.GONE);
+                               /* if (action == I.ACTION_PULL_UP) {
                                     mAdapter.setTextFooter("没有更多数据了");
-                                }
+
+                                }*/
                                 return;
                             }
                             ArrayList<CollectBean> list = ConvertUtils.array2List(result);
-
                             switch (action) {
                                 case I.ACTION_DOWNLOAD:
                                     mGoodsList.clear();
@@ -160,11 +168,13 @@ public class CollectActivity extends AppCompatActivity {
                         public void onError(String error) {
                             mAdapter.notifyDataSetChanged();
                             mtvRefreshHint.setVisibility(View.GONE);
+                            msrl.setRefreshing(false);
                             Toast.makeText(CollectActivity.this, "出问题啦", Toast.LENGTH_SHORT).show();
                         }
                     });
         }
     }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
