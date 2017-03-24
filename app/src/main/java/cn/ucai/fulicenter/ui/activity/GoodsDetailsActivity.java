@@ -19,7 +19,9 @@ import cn.ucai.fulicenter.model.bean.AlbumsBean;
 import cn.ucai.fulicenter.model.bean.GoodsDetailsBean;
 import cn.ucai.fulicenter.model.bean.MessageBean;
 import cn.ucai.fulicenter.model.bean.User;
+import cn.ucai.fulicenter.model.net.CartModel;
 import cn.ucai.fulicenter.model.net.GoodsModel;
+import cn.ucai.fulicenter.model.net.ICartModel;
 import cn.ucai.fulicenter.model.net.IGoodsModel;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
 import cn.ucai.fulicenter.model.utils.CommonUtils;
@@ -43,6 +45,7 @@ public class GoodsDetailsActivity extends AppCompatActivity {
     @BindView(R.id.tvGoodsPrice)
     TextView mTvGoodsPrice;
     IGoodsModel mModel;
+    ICartModel mCartModel;
     Unbinder bind;
     @BindView(R.id.salv)
     SlideAutoLoopView mSalv;
@@ -65,6 +68,7 @@ public class GoodsDetailsActivity extends AppCompatActivity {
             MFGT.finish(GoodsDetailsActivity.this);
         } else {
             mModel = new GoodsModel();
+            mCartModel = new CartModel();
             initData();
         }
     }
@@ -164,7 +168,6 @@ public class GoodsDetailsActivity extends AppCompatActivity {
 
     @OnClick(R.id.ivCollect)
     public void onCollect() {
-        User user = FuLiCenterApplication.getUserLogin();
         if (user == null) {
             MFGT.gotoLoginActivity(GoodsDetailsActivity.this,I.REQUEST_CODE_LOGIN);
         }
@@ -175,5 +178,28 @@ public class GoodsDetailsActivity extends AppCompatActivity {
         } else {
             setCollectAction(I.ACTION_ADD_COLLECT, this.user);
         }
+    }
+    @OnClick(R.id.ivCart)
+    public void addCart() {
+        if (user == null) {
+            MFGT.gotoLoginActivity(GoodsDetailsActivity.this,I.REQUEST_CODE_LOGIN);
+        }
+        if (util.check())return;
+        mCartModel.CartAction(GoodsDetailsActivity.this, I.ACTION_CART_ADD, user.getMuserName(),
+                null, String.valueOf(goodsId), 1, new OnCompleteListener<MessageBean>() {
+                    @Override
+                    public void onSuccess(MessageBean result) {
+                        if (result != null && result.isSuccess()) {
+                            CommonUtils.showShortToast(R.string.add_goods_success);
+                        } else {
+                            CommonUtils.showShortToast(R.string.add_goods_fail);
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        CommonUtils.showShortToast(R.string.add_goods_fail);
+                    }
+                });
     }
 }

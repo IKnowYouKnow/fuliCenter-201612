@@ -16,6 +16,7 @@ import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.FuLiCenterApplication;
 import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.ui.fragment.BoutiqueFragment;
+import cn.ucai.fulicenter.ui.fragment.CartFragment;
 import cn.ucai.fulicenter.ui.fragment.CategoryFragment;
 import cn.ucai.fulicenter.ui.fragment.NewGoodsFragment;
 import cn.ucai.fulicenter.ui.fragment.PersonCenterFragment;
@@ -40,6 +41,11 @@ public class MainActivity extends AppCompatActivity {
     int index;
     int currentIndex;
     Fragment[] fragments;
+    NewGoodsFragment mGoodsFragment;
+    BoutiqueFragment mBoutiqueFragment;
+    CategoryFragment mCategoryFragment;
+    CartFragment mCartFragment;
+    PersonCenterFragment mPersonCenterFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +58,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initFragment() {
+        mGoodsFragment = new NewGoodsFragment();
+        mBoutiqueFragment = new BoutiqueFragment();
+        mCategoryFragment = new CategoryFragment();
+        mCartFragment= new CartFragment();
+        mPersonCenterFragment = new PersonCenterFragment();
         fragments = new Fragment[5];
-        fragments[0] = new NewGoodsFragment();
-        fragments[1] = new BoutiqueFragment();
-        fragments[2] = new CategoryFragment();
-        fragments[3] = new NewGoodsFragment();
-        fragments[4] = new PersonCenterFragment();
+        fragments[0] = mGoodsFragment;
+        fragments[1] = mBoutiqueFragment;
+        fragments[2] = mCategoryFragment;
+        fragments[3] = mCartFragment;
+        fragments[4] = mPersonCenterFragment;
     }
 
     private void initRadioButton() {
