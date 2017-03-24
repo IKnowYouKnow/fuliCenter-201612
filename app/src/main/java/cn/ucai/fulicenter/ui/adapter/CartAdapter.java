@@ -13,10 +13,17 @@ import java.util.StringTokenizer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.ucai.fulicenter.R;
+import cn.ucai.fulicenter.application.FuLiCenterApplication;
 import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.bean.CartBean;
 import cn.ucai.fulicenter.model.bean.GoodsDetailsBean;
+import cn.ucai.fulicenter.model.bean.MessageBean;
+import cn.ucai.fulicenter.model.bean.User;
+import cn.ucai.fulicenter.model.net.CartModel;
+import cn.ucai.fulicenter.model.net.ICartModel;
+import cn.ucai.fulicenter.model.net.OnCompleteListener;
 import cn.ucai.fulicenter.model.utils.ImageLoader;
 
 /**
@@ -29,23 +36,27 @@ public class CartAdapter extends RecyclerView.Adapter {
     ArrayList<CartBean> mCartList;
 
     boolean isMore;
+    ICartModel mModel;
 
 
     public void setMore(boolean more) {
         isMore = more;
     }
+
     public boolean isMore() {
 
         return isMore;
     }
+
     public CartAdapter(Context mContext, ArrayList<CartBean> cartList) {
         this.mContext = mContext;
         this.mCartList = cartList;
+        mModel = new CartModel();
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ItemHolder( View.inflate(mContext, R.layout.item_cart, null));
+        return new ItemHolder(View.inflate(mContext, R.layout.item_cart, null));
     }
 
     @Override
@@ -76,24 +87,47 @@ public class CartAdapter extends RecyclerView.Adapter {
         TextView mTvCartCount;
         @BindView(R.id.tv_cart_price)
         TextView mTvCartPrice;
+        @BindView(R.id.iv_cart_add)
+        TextView addCart;
+        int count = 1;
 
         ItemHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
 
-        public void bind(int position) {
-
+        public void bind(final int position) {
             if (mCartList != null) {
-                CartBean bean = mCartList.get(position);
-                int count = bean.getCount();
-                mTvCartCount.setText("("+count+")");
+                final CartBean bean = mCartList.get(position);
+                count = bean.getCount();
+                mTvCartCount.setText("(" + count + ")");
                 GoodsDetailsBean goods = bean.getGoods();
                 if (goods != null) {
+                    mCbCartSelected.setChecked(bean.isChecked());
                     mTvCartGoodName.setText(goods.getGoodsName());
                     mTvCartPrice.setText(goods.getCurrencyPrice());
-                    ImageLoader.downloadImg(mContext,mIvCartThumb,goods.getGoodsThumb());
+                    ImageLoader.downloadImg(mContext, mIvCartThumb, goods.getGoodsThumb());
                 }
+                addCart.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        count++;
+                        User user = FuLiCenterApplication.getUserLogin();
+                        mModel.CartAction(mContext, I.ACTION_CART_ADD, user.getMuserName(),
+                                String.valueOf(bean.getId()), String.valueOf(bean.getGoodsId()), count,
+                                new OnCompleteListener<MessageBean>() {
+                                    @Override
+                                    public void onSuccess(MessageBean result) {
+
+                                    }
+
+                                    @Override
+                                    public void onError(String error) {
+
+                                    }
+                                });
+                    }
+                });
             }
         }
     }

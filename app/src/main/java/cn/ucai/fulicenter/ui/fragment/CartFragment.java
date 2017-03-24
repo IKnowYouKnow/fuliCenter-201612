@@ -91,7 +91,6 @@ public class CartFragment extends Fragment {
         mSrl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mCartList.clear();
                 initData();
                 mTvHint.setVisibility(View.VISIBLE);
             }
@@ -110,6 +109,7 @@ public class CartFragment extends Fragment {
             @Override
             public void onSuccess(CartBean[] result) {
                 if (result != null) {
+                    mCartList.clear();
                     if (result.length > 0) {
                         mTvNothing.setVisibility(View.GONE);
                         ArrayList<CartBean> list = ConvertUtils.array2List(result);
@@ -126,5 +126,8 @@ public class CartFragment extends Fragment {
 
             }
         });
+    }
+    private void setPrice(){
+
     }
 }
