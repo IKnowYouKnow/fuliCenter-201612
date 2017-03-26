@@ -88,8 +88,11 @@ public class CartAdapter extends RecyclerView.Adapter {
         @BindView(R.id.tv_cart_price)
         TextView mTvCartPrice;
         @BindView(R.id.iv_cart_add)
-        TextView addCart;
+        ImageView addCart;
+        @BindView(R.id.iv_cart_del)
+        ImageView delCart;
         int count = 1;
+        User user = FuLiCenterApplication.getUserLogin();
 
         ItemHolder(View view) {
             super(view);
@@ -97,38 +100,67 @@ public class CartAdapter extends RecyclerView.Adapter {
         }
 
         public void bind(final int position) {
+            setListener(position);
             if (mCartList != null) {
                 final CartBean bean = mCartList.get(position);
+                GoodsDetailsBean goods = bean.getGoods();
                 count = bean.getCount();
                 mTvCartCount.setText("(" + count + ")");
-                GoodsDetailsBean goods = bean.getGoods();
                 if (goods != null) {
                     mCbCartSelected.setChecked(bean.isChecked());
                     mTvCartGoodName.setText(goods.getGoodsName());
                     mTvCartPrice.setText(goods.getCurrencyPrice());
                     ImageLoader.downloadImg(mContext, mIvCartThumb, goods.getGoodsThumb());
                 }
-                addCart.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        count++;
-                        User user = FuLiCenterApplication.getUserLogin();
-                        mModel.CartAction(mContext, I.ACTION_CART_ADD, user.getMuserName(),
-                                String.valueOf(bean.getId()), String.valueOf(bean.getGoodsId()), count,
-                                new OnCompleteListener<MessageBean>() {
-                                    @Override
-                                    public void onSuccess(MessageBean result) {
 
-                                    }
-
-                                    @Override
-                                    public void onError(String error) {
-
-                                    }
-                                });
-                    }
-                });
             }
+        }
+
+
+        private void setListener(int position) {
+            final CartBean bean = mCartList.get(position);
+            addCart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mModel.CartAction(mContext, I.ACTION_CART_ADD, user.getMuserName(),
+                            String.valueOf(bean.getId()), String.valueOf(bean.getGoodsId()), count,
+                            new OnCompleteListener<MessageBean>() {
+                                @Override
+                                public void onSuccess(MessageBean result) {
+                                    if (result != null && result.isSuccess()) {
+                                        count++;
+                                        notifyDataSetChanged();
+                                    }
+                                }
+
+                                @Override
+                                public void onError(String error) {
+
+                                }
+                            });
+                }
+            });
+            delCart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mModel.CartAction(mContext, I.ACTION_CART_DEL, user.getMuserName(),
+                            String.valueOf(bean.getId()), String.valueOf(bean.getGoodsId()),
+                            count, new OnCompleteListener<MessageBean>() {
+                                @Override
+                                public void onSuccess(MessageBean result) {
+                                    if (result != null && result.isSuccess()) {
+                                        count--;
+                                        notifyDataSetChanged();
+                                    }
+                                }
+
+                                @Override
+                                public void onError(String error) {
+
+                                }
+                            });
+                }
+            });
         }
     }
 }
