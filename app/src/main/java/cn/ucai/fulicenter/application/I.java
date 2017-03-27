@@ -61,6 +61,8 @@ public interface I {
     int ACTION_CART_ADD = 1;
     int ACTION_CART_DEL = 2;
     int ACTION_CART_UPDATA = 3;
+    String ADDRESS_PRICE = "fulicenter.address_price";
+    int REQUEST_CODE_PRICE = 5;
 
     interface Goods {
         String KEY_RESULT = "result";

@@ -12,6 +12,7 @@ import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.bean.BoutiqueBean;
 import cn.ucai.fulicenter.model.bean.CategoryChildBean;
 import cn.ucai.fulicenter.model.bean.NewGoodsBean;
+import cn.ucai.fulicenter.ui.activity.AddressActivity;
 import cn.ucai.fulicenter.ui.activity.BoutiqueChildActivity;
 import cn.ucai.fulicenter.ui.activity.CategoryChildActivity;
 import cn.ucai.fulicenter.ui.activity.CollectActivity;
@@ -90,4 +91,11 @@ public class MFGT {
     public static void gotoCollectActivity(Activity activity) {
         startActivity(activity,CollectActivity.class);
     }
+
+    public static void gotoAddressActivity(Activity activity,int price) {
+        startActivityForResult(activity,new Intent(activity,AddressActivity.class).putExtra(I.ADDRESS_PRICE,price),
+                I.REQUEST_CODE_PRICE);
+    }
+
+
 }
