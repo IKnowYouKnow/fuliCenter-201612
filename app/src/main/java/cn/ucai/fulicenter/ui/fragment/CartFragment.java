@@ -7,9 +7,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,12 +25,15 @@ import cn.ucai.fulicenter.application.FuLiCenterApplication;
 import cn.ucai.fulicenter.application.I;
 import cn.ucai.fulicenter.model.bean.BoutiqueBean;
 import cn.ucai.fulicenter.model.bean.CartBean;
+import cn.ucai.fulicenter.model.bean.GoodsDetailsBean;
+import cn.ucai.fulicenter.model.bean.MessageBean;
 import cn.ucai.fulicenter.model.bean.User;
 import cn.ucai.fulicenter.model.net.CartModel;
 import cn.ucai.fulicenter.model.net.IBoutiqueModel;
 import cn.ucai.fulicenter.model.net.ICartModel;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
 import cn.ucai.fulicenter.model.utils.ConvertUtils;
+import cn.ucai.fulicenter.model.utils.L;
 import cn.ucai.fulicenter.model.utils.ResultUtils;
 import cn.ucai.fulicenter.ui.adapter.BoutiqueAdapter;
 import cn.ucai.fulicenter.ui.adapter.CartAdapter;
@@ -57,6 +63,7 @@ public class CartFragment extends Fragment {
     ArrayList<CartBean> mCartList;
     CartAdapter mAdapter;
     User user;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -73,6 +80,7 @@ public class CartFragment extends Fragment {
         initData();
         setListener();
     }
+
     private void initView() {
         mLayoutManager = new LinearLayoutManager(getContext());
         mRv.setLayoutManager(mLayoutManager);
@@ -81,11 +89,87 @@ public class CartFragment extends Fragment {
         mCartList = new ArrayList<>();
         mAdapter = new CartAdapter(getContext(), mCartList);
         mRv.setAdapter(mAdapter);
-    }
-    private void setListener() {
-        setPullDownListener();
+
     }
 
+    private void setListener() {
+        setPullDownListener();
+        mAdapter.setListener(addCart);
+        mAdapter.setDelListener(delListener);
+        mAdapter.setCbListener(cbListener);
+
+    }
+
+    CheckBox.OnCheckedChangeListener cbListener = new CheckBox.OnCheckedChangeListener() {
+
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            int position = (int) buttonView.getTag();
+            mCartList.get(position).setChecked(isChecked);
+            setPrice();
+        }
+    };
+    private static final String TAG = "CartFragment";
+
+    private void setPrice() {
+        int sumPrice = 0;
+        int rankPrice = 0;
+        Log.i(TAG, "mCartList= " + mCartList);
+        for (CartBean bean : mCartList) {
+            if (bean.isChecked()) {
+                GoodsDetailsBean goods = bean.getGoods();
+                if (goods != null) {
+                    sumPrice += getPrice(goods.getCurrencyPrice()) * bean.getCount();
+                    rankPrice += getPrice(goods.getRankPrice()) * bean.getCount();
+                }
+            }
+        }
+        mTvCartSumPrice.setText("合计：¥" + sumPrice);
+        mTvCartSavePrice.setText("节省：¥" + rankPrice);
+    }
+
+    View.OnClickListener delListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int position = (int) v.getTag();
+            updateCart(position, -1);
+        }
+    };
+
+    View.OnClickListener addCart = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int position = (int) v.getTag();
+            updateCart(position, 1);
+        }
+    };
+
+    private void updateCart(final int position, final int count) {
+        final CartBean bean = mCartList.get(position);
+
+        mModel.CartAction(getContext(), I.ACTION_CART_UPDATA, null,
+                String.valueOf(bean.getId()), null, bean.getCount() + count,
+                new OnCompleteListener<MessageBean>() {
+                    @Override
+                    public void onSuccess(MessageBean result) {
+                        if (result != null && result.isSuccess()) {
+                            updateCartList(position, count);
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+
+                    }
+                });
+
+    }
+
+    private void updateCartList(int position, int count) {
+        mCartList.get(position).setCount(mCartList.get(position).getCount() + count);
+        setPrice();
+        mAdapter.notifyDataSetChanged();
+    }
 
     private void setPullDownListener() {
         mSrl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -96,6 +180,7 @@ public class CartFragment extends Fragment {
             }
         });
     }
+
     private void initData() {
         mModel = new CartModel();
         user = FuLiCenterApplication.getUserLogin();
@@ -127,7 +212,9 @@ public class CartFragment extends Fragment {
             }
         });
     }
-    private void setPrice(){
 
+    private int getPrice(String p) {
+        String str = p.substring(p.lastIndexOf("￥") + 1);
+        return Integer.valueOf(str);
     }
 }

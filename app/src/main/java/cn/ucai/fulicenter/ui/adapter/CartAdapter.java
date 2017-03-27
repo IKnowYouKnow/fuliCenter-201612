@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -38,6 +39,23 @@ public class CartAdapter extends RecyclerView.Adapter {
     boolean isMore;
     ICartModel mModel;
 
+    View.OnClickListener listener;
+
+    View.OnClickListener delListener;
+
+    CheckBox.OnCheckedChangeListener cbListener;
+
+    public void setCbListener(CheckBox.OnCheckedChangeListener cbListener) {
+        this.cbListener = cbListener;
+    }
+
+    public void setDelListener(View.OnClickListener delListener) {
+        this.delListener = delListener;
+    }
+
+    public void setListener(View.OnClickListener listener) {
+        this.listener = listener;
+    }
 
     public void setMore(boolean more) {
         isMore = more;
@@ -92,7 +110,6 @@ public class CartAdapter extends RecyclerView.Adapter {
         @BindView(R.id.iv_cart_del)
         ImageView delCart;
         int count = 1;
-        User user = FuLiCenterApplication.getUserLogin();
 
         ItemHolder(View view) {
             super(view);
@@ -100,7 +117,15 @@ public class CartAdapter extends RecyclerView.Adapter {
         }
 
         public void bind(final int position) {
-            setListener(position);
+
+            addCart.setOnClickListener(listener);
+            addCart.setTag(position);
+            delCart.setOnClickListener(delListener);
+            delCart.setTag(position);
+
+            mCbCartSelected.setOnCheckedChangeListener(cbListener);
+            mCbCartSelected.setTag(position);
+
             if (mCartList != null) {
                 final CartBean bean = mCartList.get(position);
                 GoodsDetailsBean goods = bean.getGoods();
@@ -114,53 +139,6 @@ public class CartAdapter extends RecyclerView.Adapter {
                 }
 
             }
-        }
-
-
-        private void setListener(int position) {
-            final CartBean bean = mCartList.get(position);
-            addCart.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mModel.CartAction(mContext, I.ACTION_CART_ADD, user.getMuserName(),
-                            String.valueOf(bean.getId()), String.valueOf(bean.getGoodsId()), count,
-                            new OnCompleteListener<MessageBean>() {
-                                @Override
-                                public void onSuccess(MessageBean result) {
-                                    if (result != null && result.isSuccess()) {
-                                        count++;
-                                        notifyDataSetChanged();
-                                    }
-                                }
-
-                                @Override
-                                public void onError(String error) {
-
-                                }
-                            });
-                }
-            });
-            delCart.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mModel.CartAction(mContext, I.ACTION_CART_DEL, user.getMuserName(),
-                            String.valueOf(bean.getId()), String.valueOf(bean.getGoodsId()),
-                            count, new OnCompleteListener<MessageBean>() {
-                                @Override
-                                public void onSuccess(MessageBean result) {
-                                    if (result != null && result.isSuccess()) {
-                                        count--;
-                                        notifyDataSetChanged();
-                                    }
-                                }
-
-                                @Override
-                                public void onError(String error) {
-
-                                }
-                            });
-                }
-            });
         }
     }
 }
