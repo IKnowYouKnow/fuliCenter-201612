@@ -41,16 +41,10 @@ public class CartAdapter extends RecyclerView.Adapter {
 
     View.OnClickListener listener;
 
-    View.OnClickListener delListener;
-
     CheckBox.OnCheckedChangeListener cbListener;
 
     public void setCbListener(CheckBox.OnCheckedChangeListener cbListener) {
         this.cbListener = cbListener;
-    }
-
-    public void setDelListener(View.OnClickListener delListener) {
-        this.delListener = delListener;
     }
 
     public void setListener(View.OnClickListener listener) {
@@ -120,8 +114,11 @@ public class CartAdapter extends RecyclerView.Adapter {
 
             addCart.setOnClickListener(listener);
             addCart.setTag(position);
-            delCart.setOnClickListener(delListener);
+            addCart.setTag(R.id.action_add_cart,1);
+
+            delCart.setOnClickListener(listener);
             delCart.setTag(position);
+            delCart.setTag(R.id.action_del_cart,-1);
 
             mCbCartSelected.setOnCheckedChangeListener(cbListener);
             mCbCartSelected.setTag(position);

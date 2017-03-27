@@ -35,6 +35,7 @@ import cn.ucai.fulicenter.model.net.OnCompleteListener;
 import cn.ucai.fulicenter.model.utils.ConvertUtils;
 import cn.ucai.fulicenter.model.utils.L;
 import cn.ucai.fulicenter.model.utils.ResultUtils;
+import cn.ucai.fulicenter.ui.activity.LoginActivity;
 import cn.ucai.fulicenter.ui.adapter.BoutiqueAdapter;
 import cn.ucai.fulicenter.ui.adapter.CartAdapter;
 
@@ -95,7 +96,6 @@ public class CartFragment extends Fragment {
     private void setListener() {
         setPullDownListener();
         mAdapter.setListener(addCart);
-        mAdapter.setDelListener(delListener);
         mAdapter.setCbListener(cbListener);
 
     }
@@ -128,27 +128,27 @@ public class CartFragment extends Fragment {
         mTvCartSavePrice.setText("节省：¥" + rankPrice);
     }
 
-    View.OnClickListener delListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            int position = (int) v.getTag();
-            updateCart(position, -1);
-        }
-    };
-
     View.OnClickListener addCart = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             int position = (int) v.getTag();
-            updateCart(position, 1);
+            int count = 0;
+            Log.i(TAG,"addCart"+v.getTag(R.id.action_add_cart));
+            Log.i(TAG,"delCart"+v.getTag(R.id.action_del_cart));
+            if (v.getTag(R.id.action_add_cart) != null) {
+                    count = (int) v.getTag(R.id.action_add_cart);
+            }else if (v.getTag(R.id.action_del_cart) != null) {
+                count = (int) v.getTag(R.id.action_del_cart);
+            }
+            updateCart(position, count);
         }
     };
 
     private void updateCart(final int position, final int count) {
         final CartBean bean = mCartList.get(position);
-
-        mModel.CartAction(getContext(), I.ACTION_CART_UPDATA, null,
-                String.valueOf(bean.getId()), null, bean.getCount() + count,
+        int action = bean.getCount() <=0 ? I.ACTION_CART_DEL : I.ACTION_CART_UPDATA;
+        mModel.CartAction(getContext(), action, FuLiCenterApplication.getUserLogin().getMuserName(),
+                String.valueOf(bean.getId()), String.valueOf(bean.getGoodsId()), bean.getCount() + count,
                 new OnCompleteListener<MessageBean>() {
                     @Override
                     public void onSuccess(MessageBean result) {
@@ -166,7 +166,11 @@ public class CartFragment extends Fragment {
     }
 
     private void updateCartList(int position, int count) {
-        mCartList.get(position).setCount(mCartList.get(position).getCount() + count);
+        if (mCartList.get(position).getCount() + count == 0) {
+            mCartList.remove(position);
+        } else {
+            mCartList.get(position).setCount(mCartList.get(position).getCount() + count);
+        }
         setPrice();
         mAdapter.notifyDataSetChanged();
     }
@@ -198,7 +202,11 @@ public class CartFragment extends Fragment {
                     if (result.length > 0) {
                         mTvNothing.setVisibility(View.GONE);
                         ArrayList<CartBean> list = ConvertUtils.array2List(result);
-                        mCartList.addAll(list);
+                        for (CartBean been:list) {
+                            if (been.getCount() > 0 )
+                                mCartList.add(been);
+                        }
+//                        mCartList.addAll(list);
                         mAdapter.notifyDataSetChanged();
                     }
                 }
