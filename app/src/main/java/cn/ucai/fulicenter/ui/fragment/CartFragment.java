@@ -1,6 +1,11 @@
 package cn.ucai.fulicenter.ui.fragment;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.ProviderInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,30 +19,25 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.FuLiCenterApplication;
 import cn.ucai.fulicenter.application.I;
-import cn.ucai.fulicenter.model.bean.BoutiqueBean;
 import cn.ucai.fulicenter.model.bean.CartBean;
 import cn.ucai.fulicenter.model.bean.GoodsDetailsBean;
 import cn.ucai.fulicenter.model.bean.MessageBean;
 import cn.ucai.fulicenter.model.bean.User;
 import cn.ucai.fulicenter.model.net.CartModel;
-import cn.ucai.fulicenter.model.net.IBoutiqueModel;
 import cn.ucai.fulicenter.model.net.ICartModel;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
 import cn.ucai.fulicenter.model.utils.ConvertUtils;
-import cn.ucai.fulicenter.model.utils.L;
-import cn.ucai.fulicenter.model.utils.ResultUtils;
-import cn.ucai.fulicenter.ui.activity.LoginActivity;
-import cn.ucai.fulicenter.ui.adapter.BoutiqueAdapter;
 import cn.ucai.fulicenter.ui.adapter.CartAdapter;
+import cn.ucai.fulicenter.ui.view.MFGT;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,6 +64,9 @@ public class CartFragment extends Fragment {
     ArrayList<CartBean> mCartList;
     CartAdapter mAdapter;
     User user;
+    int sumPrice = 0;
+    int rankPrice = 0;
+    UpdateReceiver receiver;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,7 +93,9 @@ public class CartFragment extends Fragment {
         mCartList = new ArrayList<>();
         mAdapter = new CartAdapter(getContext(), mCartList);
         mRv.setAdapter(mAdapter);
-
+        IntentFilter filter = new IntentFilter(I.BROADCAST_UPDATA_CART);
+        receiver = new UpdateReceiver();
+        getActivity().registerReceiver(receiver,filter);
     }
 
     private void setListener() {
@@ -112,8 +117,7 @@ public class CartFragment extends Fragment {
     private static final String TAG = "CartFragment";
 
     private void setPrice() {
-        int sumPrice = 0;
-        int rankPrice = 0;
+
         Log.i(TAG, "mCartList= " + mCartList);
         for (CartBean bean : mCartList) {
             if (bean.isChecked()) {
@@ -125,7 +129,7 @@ public class CartFragment extends Fragment {
             }
         }
         mTvCartSumPrice.setText("合计：¥" + sumPrice);
-        mTvCartSavePrice.setText("节省：¥" + rankPrice);
+        mTvCartSavePrice.setText("节省：¥" + (sumPrice-rankPrice));
     }
 
     View.OnClickListener addCart = new View.OnClickListener() {
@@ -133,11 +137,11 @@ public class CartFragment extends Fragment {
         public void onClick(View v) {
             int position = (int) v.getTag();
             int count = 0;
-            Log.i(TAG,"addCart"+v.getTag(R.id.action_add_cart));
-            Log.i(TAG,"delCart"+v.getTag(R.id.action_del_cart));
+            Log.i(TAG, "addCart" + v.getTag(R.id.action_add_cart));
+            Log.i(TAG, "delCart" + v.getTag(R.id.action_del_cart));
             if (v.getTag(R.id.action_add_cart) != null) {
-                    count = (int) v.getTag(R.id.action_add_cart);
-            }else if (v.getTag(R.id.action_del_cart) != null) {
+                count = (int) v.getTag(R.id.action_add_cart);
+            } else if (v.getTag(R.id.action_del_cart) != null) {
                 count = (int) v.getTag(R.id.action_del_cart);
             }
             updateCart(position, count);
@@ -146,7 +150,7 @@ public class CartFragment extends Fragment {
 
     private void updateCart(final int position, final int count) {
         final CartBean bean = mCartList.get(position);
-        int action = bean.getCount() <=0 ? I.ACTION_CART_DEL : I.ACTION_CART_UPDATA;
+        int action = bean.getCount() <= 0 ? I.ACTION_CART_DEL : I.ACTION_CART_UPDATA;
         mModel.CartAction(getContext(), action, FuLiCenterApplication.getUserLogin().getMuserName(),
                 String.valueOf(bean.getId()), String.valueOf(bean.getGoodsId()), bean.getCount() + count,
                 new OnCompleteListener<MessageBean>() {
@@ -202,8 +206,8 @@ public class CartFragment extends Fragment {
                     if (result.length > 0) {
                         mTvNothing.setVisibility(View.GONE);
                         ArrayList<CartBean> list = ConvertUtils.array2List(result);
-                        for (CartBean been:list) {
-                            if (been.getCount() > 0 )
+                        for (CartBean been : list) {
+                            if (been.getCount() > 0)
                                 mCartList.add(been);
                         }
 //                        mCartList.addAll(list);
@@ -221,8 +225,22 @@ public class CartFragment extends Fragment {
         });
     }
 
+    class UpdateReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            initData();
+        }
+    }
     private int getPrice(String p) {
         String str = p.substring(p.lastIndexOf("￥") + 1);
         return Integer.valueOf(str);
+    }
+
+    @OnClick(R.id.tv_cart_buy)
+    public void onClick() {
+        if (sumPrice > 0) {
+            MFGT.gotoAddressActivity(getActivity(), rankPrice);
+        }
     }
 }

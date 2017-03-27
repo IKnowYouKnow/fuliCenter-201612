@@ -1,5 +1,6 @@
 package cn.ucai.fulicenter.ui.activity;
 
+import android.content.Intent;
 import android.net.rtp.RtpStream;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,6 +26,7 @@ import cn.ucai.fulicenter.model.net.ICartModel;
 import cn.ucai.fulicenter.model.net.IGoodsModel;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
 import cn.ucai.fulicenter.model.utils.CommonUtils;
+import cn.ucai.fulicenter.ui.fragment.CartFragment;
 import cn.ucai.fulicenter.ui.util.AntiShake;
 import cn.ucai.fulicenter.ui.view.FlowIndicator;
 import cn.ucai.fulicenter.ui.view.MFGT;
@@ -190,6 +192,7 @@ public class GoodsDetailsActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(MessageBean result) {
                         if (result != null && result.isSuccess()) {
+                            sendBroadcast(new Intent(I.BROADCAST_UPDATA_CART));
                             CommonUtils.showShortToast(R.string.add_goods_success);
                         } else {
                             CommonUtils.showShortToast(R.string.add_goods_fail);
