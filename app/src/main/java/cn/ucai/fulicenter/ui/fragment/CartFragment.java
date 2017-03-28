@@ -35,6 +35,7 @@ import cn.ucai.fulicenter.model.bean.User;
 import cn.ucai.fulicenter.model.net.CartModel;
 import cn.ucai.fulicenter.model.net.ICartModel;
 import cn.ucai.fulicenter.model.net.OnCompleteListener;
+import cn.ucai.fulicenter.model.utils.CommonUtils;
 import cn.ucai.fulicenter.model.utils.ConvertUtils;
 import cn.ucai.fulicenter.ui.adapter.CartAdapter;
 import cn.ucai.fulicenter.ui.view.MFGT;
@@ -95,7 +96,7 @@ public class CartFragment extends Fragment {
         mRv.setAdapter(mAdapter);
         IntentFilter filter = new IntentFilter(I.BROADCAST_UPDATA_CART);
         receiver = new UpdateReceiver();
-        getActivity().registerReceiver(receiver,filter);
+        getActivity().registerReceiver(receiver, filter);
     }
 
     private void setListener() {
@@ -117,7 +118,8 @@ public class CartFragment extends Fragment {
     private static final String TAG = "CartFragment";
 
     private void setPrice() {
-
+        sumPrice = 0;
+        rankPrice = 0;
         Log.i(TAG, "mCartList= " + mCartList);
         for (CartBean bean : mCartList) {
             if (bean.isChecked()) {
@@ -129,7 +131,7 @@ public class CartFragment extends Fragment {
             }
         }
         mTvCartSumPrice.setText("合计：¥" + sumPrice);
-        mTvCartSavePrice.setText("节省：¥" + (sumPrice-rankPrice));
+        mTvCartSavePrice.setText("节省：¥" + (sumPrice - rankPrice));
     }
 
     View.OnClickListener addCart = new View.OnClickListener() {
@@ -210,7 +212,6 @@ public class CartFragment extends Fragment {
                             if (been.getCount() > 0)
                                 mCartList.add(been);
                         }
-//                        mCartList.addAll(list);
                         mAdapter.notifyDataSetChanged();
                     }
                 }
@@ -220,7 +221,6 @@ public class CartFragment extends Fragment {
 
             @Override
             public void onError(String error) {
-
             }
         });
     }
@@ -232,6 +232,7 @@ public class CartFragment extends Fragment {
             initData();
         }
     }
+
     private int getPrice(String p) {
         String str = p.substring(p.lastIndexOf("￥") + 1);
         return Integer.valueOf(str);
@@ -241,6 +242,8 @@ public class CartFragment extends Fragment {
     public void onClick() {
         if (sumPrice > 0) {
             MFGT.gotoAddressActivity(getActivity(), rankPrice);
+        } else {
+            CommonUtils.showShortToast(R.string.order_nothing);
         }
     }
 }
