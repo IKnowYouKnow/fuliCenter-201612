@@ -48,6 +48,7 @@
         <activity android:name=".ui.activity.UpdateNickActivity"/>
         <activity android:name=".ui.activity.CollectActivity"/>
         <activity android:name=".ui.activity.AddressActivity"/>
+<<<<<<< HEAD
 
         <!-- Ping++ SDK -->
         <activity
@@ -244,6 +245,9 @@
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+=======
+    </application>
+>>>>>>> origin/master
 
             <!--集成line客户端登录授权，需要添如下格式的过滤器-->
             <intent-filter>
