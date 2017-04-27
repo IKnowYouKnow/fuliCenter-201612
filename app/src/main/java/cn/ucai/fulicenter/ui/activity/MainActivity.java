@@ -13,7 +13,7 @@ import butterknife.Unbinder;
 import cn.ucai.fulicenter.R;
 import cn.ucai.fulicenter.application.FuLiCenterApplication;
 import cn.ucai.fulicenter.ui.fragment.BoutiqueFragment;
-import cn.ucai.fulicenter.ui.fragment.CategoryFragment;
+import cn.ucai.fulicenter.ui.fragment.CategoryEventFragment;
 import cn.ucai.fulicenter.ui.fragment.NewGoodsFragment;
 import cn.ucai.fulicenter.ui.view.MFGT;
 
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.rbCategory:
                 index = 2;
-                ft.replace(R.id.content_layout, new CategoryFragment()).commit();
+                ft.replace(R.id.content_layout, new CategoryEventFragment()).commit();
                 break;
             case R.id.rbCart:
                 if (FuLiCenterApplication.getUserLogin() == null) {

@@ -1,0 +1,21 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="horizontal"
+>
+    <fragment
+        android:id="@+id/group"
+        android:name="cn.ucai.fulicenter.ui.fragment.CategoryGroupFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        />
+
+    <fragment
+        android:id="@+id/child"
+        android:name="cn.ucai.fulicenter.ui.fragment.CategoryChildFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
+
+</LinearLayout>
